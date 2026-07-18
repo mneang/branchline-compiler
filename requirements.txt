@@ -1,6 +1,7 @@
-genblaze-core
-genblaze-s3
+genblaze-core[audio]==0.3.6
+genblaze-s3==0.3.5
 python-dotenv
 pydantic
 pytest
 boto3
+google-genai==2.12.1

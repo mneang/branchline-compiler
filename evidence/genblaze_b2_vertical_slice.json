@@ -1,0 +1,19 @@
+{
+  "pipeline": "branchline-gemini-tts-b2-smoke",
+  "provider": "google-gemini-tts",
+  "model": "gemini-2.5-flash-preview-tts",
+  "voice": "Kore",
+  "run_id": "e6884d39-f6ce-4b4e-9740-bc4484eda1ef",
+  "asset_url": "https://s3.us-west-004.backblazeb2.com/branchline-media-mikey-2026/branchline/smoke/runs/2026-07-18/e6884d39-f6ce-4b4e-9740-bc4484eda1ef/assets/0bc89ca6-16b0-47c0-aeb1-5541fa34db08.wav",
+  "b2_object_key": "branchline/smoke/runs/2026-07-18/e6884d39-f6ce-4b4e-9740-bc4484eda1ef/assets/0bc89ca6-16b0-47c0-aeb1-5541fa34db08.wav",
+  "media_type": "audio/wav",
+  "size_bytes": 215610,
+  "duration_seconds": 4.490958333333333,
+  "asset_sha256": "9c62df3a878cdb9003cc7d85b985903d712020c4b91f13e073081df27904e9d7",
+  "remote_sha256": "9c62df3a878cdb9003cc7d85b985903d712020c4b91f13e073081df27904e9d7",
+  "pipeline_manifest_verified": true,
+  "stored_manifest_verified": true,
+  "canonical_hashes_match": true,
+  "remote_hash_matches_asset": true,
+  "status": "GENBLAZE B2 VERTICAL SLICE VERIFIED"
+}
