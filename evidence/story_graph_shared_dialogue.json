@@ -1,0 +1,28 @@
+{
+  "project_id": "last-train",
+  "changed_sources": [
+    "dialogue.opening"
+  ],
+  "stale_assets": [
+    "caption.opening",
+    "preview.ending_a",
+    "preview.ending_b",
+    "voice.opening"
+  ],
+  "reused_assets": [
+    "thumbnail.ending_a",
+    "thumbnail.ending_b"
+  ],
+  "affected_paths": [
+    "ending_a",
+    "ending_b"
+  ],
+  "unaffected_paths": [],
+  "metrics": {
+    "source_changes": 1,
+    "assets_to_rebuild": 4,
+    "assets_to_reuse": 2,
+    "paths_affected": 2,
+    "paths_total": 2
+  }
+}
