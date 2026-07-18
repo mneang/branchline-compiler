@@ -1,0 +1,10 @@
+{
+  "approval_id": "eb8400ec-f309-4a6e-bc1b-2b5bc3a1adb0",
+  "project_id": "last-train",
+  "plan_sha256": "f180ae1dc8fe0f87b21281ef512017c1fae05bbd06151a9901475ba300d2b485",
+  "decision": "approved",
+  "approved_by": "mneang",
+  "approved_at": "2026-07-18T23:13:59.399541+00:00",
+  "note": "Approve only the two stale Ending B assets.",
+  "status": "REBUILD APPROVED"
+}
