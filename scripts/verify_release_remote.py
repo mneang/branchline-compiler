@@ -265,6 +265,13 @@ def verify_assets(
                 "creation_action",
                 "unknown",
             ),
+            "release_action": asset.get(
+                "release_action",
+                asset.get(
+                    "creation_action",
+                    "unknown",
+                ),
+            ),
             "verified": True,
         }
 
@@ -488,7 +495,15 @@ def main() -> int:
         action_counts: dict[str, int] = {}
 
         for asset in verified_assets.values():
-            action = str(asset["creation_action"])
+            action = str(
+                asset.get(
+                    "release_action",
+                    asset.get(
+                        "creation_action",
+                        "unknown",
+                    ),
+                )
+            )
             action_counts[action] = (
                 action_counts.get(action, 0) + 1
             )
