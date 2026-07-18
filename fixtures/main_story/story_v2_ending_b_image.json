@@ -1,0 +1,88 @@
+{
+  "project_id": "last-train",
+  "sources": [
+    {
+      "id": "dialogue.opening",
+      "type": "dialogue",
+      "value": "The last train leaves at seven."
+    },
+    {
+      "id": "image.ending_a",
+      "type": "image",
+      "value": "b2://source/ending-a-v1.png"
+    },
+    {
+      "id": "image.ending_b",
+      "type": "image",
+      "value": "b2://source/ending-b-v2-night-platform.png"
+    }
+  ],
+  "assets": [
+    {
+      "id": "voice.opening",
+      "type": "audio",
+      "depends_on": [
+        "dialogue.opening"
+      ]
+    },
+    {
+      "id": "caption.opening",
+      "type": "caption",
+      "depends_on": [
+        "dialogue.opening"
+      ]
+    },
+    {
+      "id": "thumbnail.ending_a",
+      "type": "image",
+      "depends_on": [
+        "image.ending_a"
+      ]
+    },
+    {
+      "id": "thumbnail.ending_b",
+      "type": "image",
+      "depends_on": [
+        "image.ending_b"
+      ]
+    },
+    {
+      "id": "preview.ending_a",
+      "type": "video",
+      "depends_on": [
+        "voice.opening",
+        "caption.opening",
+        "image.ending_a"
+      ]
+    },
+    {
+      "id": "preview.ending_b",
+      "type": "video",
+      "depends_on": [
+        "voice.opening",
+        "caption.opening",
+        "image.ending_b"
+      ]
+    }
+  ],
+  "paths": [
+    {
+      "id": "ending_a",
+      "required_assets": [
+        "voice.opening",
+        "caption.opening",
+        "thumbnail.ending_a",
+        "preview.ending_a"
+      ]
+    },
+    {
+      "id": "ending_b",
+      "required_assets": [
+        "voice.opening",
+        "caption.opening",
+        "thumbnail.ending_b",
+        "preview.ending_b"
+      ]
+    }
+  ]
+}
