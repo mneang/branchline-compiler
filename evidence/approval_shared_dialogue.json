@@ -1,0 +1,10 @@
+{
+  "approval_id": "f4d76204-6677-4980-94d4-84a723816a86",
+  "project_id": "last-train",
+  "plan_sha256": "7fda1b4e5c90803f9637e4f60fea03b6a728bbc11f4109df8a8b15e2248bf6d0",
+  "decision": "approved",
+  "approved_by": "mneang",
+  "approved_at": "2026-07-18T23:21:33.701066+00:00",
+  "note": "Approve rebuilding the four stale shared-dialogue assets only.",
+  "status": "REBUILD APPROVED"
+}

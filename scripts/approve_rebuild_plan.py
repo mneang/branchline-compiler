@@ -1,4 +1,4 @@
-"""Approve or reject an exact Branchline rebuild plan."""
+"""Approve or reject one exact Branchline rebuild plan."""
 
 from __future__ import annotations
 
@@ -23,16 +23,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--note", default="")
 
     decision = parser.add_mutually_exclusive_group()
-    decision.add_argument(
-        "--approve",
-        action="store_true",
-        help="Approve the rebuild plan.",
-    )
-    decision.add_argument(
-        "--reject",
-        action="store_true",
-        help="Reject the rebuild plan.",
-    )
+    decision.add_argument("--approve", action="store_true")
+    decision.add_argument("--reject", action="store_true")
 
     return parser.parse_args()
 
@@ -44,16 +36,16 @@ def main() -> int:
         raise SystemExit(f"Plan file does not exist: {args.plan}")
 
     plan = json.loads(args.plan.read_text())
-    chosen_decision = "rejected" if args.reject else "approved"
+    decision = "rejected" if args.reject else "approved"
 
     approval = create_approval(
         plan,
         approved_by=args.approved_by,
         note=args.note,
-        decision=chosen_decision,
+        decision=decision,
     )
 
-    if chosen_decision == "approved":
+    if decision == "approved":
         validate_approval(plan, approval)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)

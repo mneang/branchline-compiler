@@ -1,4 +1,4 @@
-"""Tests for plan-bound human rebuild approval."""
+"""Tests for plan-bound Branchline human approval."""
 
 from __future__ import annotations
 
@@ -14,28 +14,30 @@ from branchline.domain.approval import (
 from branchline.domain.story_graph import load_story, plan_rebuild
 
 
-def scenario_b_plan() -> dict:
-    previous = load_story("fixtures/main_story/story_v1.json")
-    current = load_story(
-        "fixtures/main_story/story_v2_ending_b_image.json"
+def scenario_a_plan() -> dict:
+    previous = load_story(
+        "fixtures/main_story/story_v1.json"
     )
+    current = load_story(
+        "fixtures/main_story/story_v2_shared_dialogue.json"
+    )
+
     return plan_rebuild(previous, current)
 
 
-def test_matching_human_approval_is_valid() -> None:
-    plan = scenario_b_plan()
+def test_matching_approval_is_valid() -> None:
+    plan = scenario_a_plan()
 
     approval = create_approval(
         plan,
         approved_by="project-owner",
-        note="Approve Ending B minimum rebuild.",
     )
 
     assert validate_approval(plan, approval) is True
 
 
-def test_execution_without_approval_is_blocked() -> None:
-    plan = scenario_b_plan()
+def test_missing_approval_blocks_execution() -> None:
+    plan = scenario_a_plan()
 
     with pytest.raises(
         ApprovalError,
@@ -44,8 +46,8 @@ def test_execution_without_approval_is_blocked() -> None:
         validate_approval(plan, None)
 
 
-def test_rejected_plan_is_blocked() -> None:
-    plan = scenario_b_plan()
+def test_rejection_blocks_execution() -> None:
+    plan = scenario_a_plan()
 
     rejection = create_approval(
         plan,
@@ -60,8 +62,8 @@ def test_rejected_plan_is_blocked() -> None:
         validate_approval(plan, rejection)
 
 
-def test_plan_change_after_approval_invalidates_decision() -> None:
-    original_plan = scenario_b_plan()
+def test_plan_mutation_invalidates_old_approval() -> None:
+    original_plan = scenario_a_plan()
 
     approval = create_approval(
         original_plan,
@@ -69,7 +71,10 @@ def test_plan_change_after_approval_invalidates_decision() -> None:
     )
 
     modified_plan = deepcopy(original_plan)
-    modified_plan["stale_assets"].append("preview.ending_a")
+    modified_plan["stale_assets"].append(
+        "thumbnail.ending_a"
+    )
+    modified_plan["stale_assets"].sort()
 
     with pytest.raises(
         ApprovalError,

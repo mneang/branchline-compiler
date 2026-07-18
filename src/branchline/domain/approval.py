@@ -1,4 +1,4 @@
-"""Human approval records bound to exact rebuild plans."""
+"""Human approvals bound to exact Branchline rebuild plans."""
 
 from __future__ import annotations
 
@@ -10,11 +10,11 @@ from branchline.domain.story_graph import canonical_hash
 
 
 class ApprovalError(ValueError):
-    """Raised when a rebuild plan lacks valid human approval."""
+    """Raised when execution lacks valid human authorization."""
 
 
 def plan_fingerprint(plan: dict[str, Any]) -> str:
-    """Create a deterministic SHA-256 fingerprint for a rebuild plan."""
+    """Return a deterministic SHA-256 fingerprint of a rebuild plan."""
     return canonical_hash(plan)
 
 
@@ -25,21 +25,21 @@ def create_approval(
     note: str = "",
     decision: str = "approved",
 ) -> dict[str, Any]:
-    """Create an approval or rejection bound to one exact plan."""
+    """Create a decision tied to the exact current plan."""
     actor = approved_by.strip()
     normalized_decision = decision.strip().lower()
+    project_id = str(plan.get("project_id", "")).strip()
 
     if not actor:
         raise ApprovalError("approved_by cannot be empty")
+
+    if not project_id:
+        raise ApprovalError("plan is missing project_id")
 
     if normalized_decision not in {"approved", "rejected"}:
         raise ApprovalError(
             "decision must be either 'approved' or 'rejected'"
         )
-
-    project_id = str(plan.get("project_id", "")).strip()
-    if not project_id:
-        raise ApprovalError("plan is missing project_id")
 
     return {
         "approval_id": str(uuid4()),
@@ -61,7 +61,7 @@ def validate_approval(
     plan: dict[str, Any],
     approval: dict[str, Any] | None,
 ) -> bool:
-    """Require valid approval for the current, unmodified plan."""
+    """Permit execution only for an approved, unmodified plan."""
     if approval is None:
         raise ApprovalError("No human approval was provided")
 
@@ -82,7 +82,7 @@ def validate_approval(
     if recorded_hash != expected_hash:
         raise ApprovalError(
             "Approval does not match the current rebuild plan. "
-            "The plan may have changed after approval."
+            "The plan changed after approval."
         )
 
     if not str(approval.get("approved_by", "")).strip():
