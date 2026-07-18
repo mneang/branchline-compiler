@@ -1,0 +1,6 @@
+genblaze-core
+genblaze-s3
+python-dotenv
+pydantic
+pytest
+streamlit
