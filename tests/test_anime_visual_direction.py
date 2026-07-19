@@ -37,12 +37,11 @@ def test_every_scene_has_restrained_visual_metadata() -> None:
 
         assert config["chapter_label"]
         assert config["dialogue_line"]
-
         assert len(config["dialogue_line"]) <= 80
 
 
 def test_visible_scene_copy_is_english_only() -> None:
-    visible_copy = []
+    visible_copy: list[str] = []
 
     for config in SCENE_CONFIG.values():
         visible_copy.extend(
@@ -82,17 +81,13 @@ def test_visual_layer_preserves_two_click_hero_flow() -> None:
         COMPLETE,
     )
 
-    assert ready["primary_action"] == (
-        "Analyze impact"
-    )
+    assert ready["primary_action"] == "Analyze impact"
 
     assert planned["primary_action"] == (
         "Approve plan & replay verified release"
     )
 
-    assert complete["primary_action"] == (
-        "Replay scenario"
-    )
+    assert complete["primary_action"] == "Replay scenario"
 
 
 def test_each_phase_keeps_the_same_story_identity() -> None:
@@ -123,23 +118,30 @@ def test_each_phase_keeps_the_same_story_identity() -> None:
     }
 
 
-def test_app_installs_visual_layer_without_new_navigation() -> None:
+def test_app_uses_focused_manga_release_studio() -> None:
+    """Change 11 replaces the older layered anime dashboard."""
     source = Path("app.py").read_text()
 
-    assert "install_anime_style()" in source
-    assert "render_scene_fx(" in source
-    assert "render_story_quote(" in source
+    assert "build_release_spread" in source
+    assert "app.add_static_files(" in source
+    assert '"/manga-art"' in source
 
-    # The main experience remains three scenario choices,
-    # not a growing application navigation system.
-    assert source.count(
-        '"SELECTIVE REBUILD"'
-    ) == 1
+    assert "ui.select(" in source
+    assert "View technical proof" in source
 
-    assert source.count(
-        '"SAFETY CHECK"'
-    ) == 1
+    assert "release-shell" in source
+    assert "manga-panel" in source
+    assert "decision-rail" in source
+    assert "sponsor-strip" in source
 
-    assert source.count(
-        '"SHARED CHANGE"'
-    ) == 1
+    assert "screen()" in source
+
+    # Old Change 10 layering should not remain in the rebuilt app.
+    assert "install_anime_style()" not in source
+    assert "render_scene_fx(" not in source
+    assert "render_story_quote(" not in source
+
+    # Alternative incidents stay secondary to the hero flow.
+    assert "scenario-button" not in source
+    assert "progress_rail" not in source
+    assert "anime-route-ribbon" not in source
