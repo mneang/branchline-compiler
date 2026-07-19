@@ -1,0 +1,178 @@
+{
+  "schema_version": 2,
+  "project_id": "last-train",
+  "release_id": "baseline-v1-canonical",
+  "legacy_release_id": "baseline-v1",
+  "release_object_key": "branchline/projects/last-train/releases/baseline-v1-canonical/release.json",
+  "created_at": "2026-07-19T02:14:42.755586+00:00",
+  "story_sha256": "b825775a058d956309a5cdc2c39fa3659078decacfbc2e6a2661c25d81b295ba",
+  "source_hashes": {
+    "dialogue.opening": "a1a605f519ba3c3e9b41581091aa7a21255a0a8ef169e68f37393420c556bdd8",
+    "image.ending_a": "d1b6e3d201667dabce9ec72555c3e7f00495a8e53a2847694e90a3090bfdfbac",
+    "image.ending_b": "f4ecc7e5a3b0189f2b3591d5ff027517a4fe2473e11effa497cf1240e40e6944"
+  },
+  "assets": {
+    "voice.opening": {
+      "logical_id": "voice.opening",
+      "object_key": "branchline/genblaze/assets/7c/68/7c68ff99b9f308d2ef39f26d01799289a09cbe77618e0ac793ba95728993f50f.wav",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/genblaze/assets/7c/68/7c68ff99b9f308d2ef39f26d01799289a09cbe77618e0ac793ba95728993f50f.wav",
+      "sha256": "7c68ff99b9f308d2ef39f26d01799289a09cbe77618e0ac793ba95728993f50f",
+      "size_bytes": 127290,
+      "media_type": "audio/wav",
+      "provider": "google-gemini-tts",
+      "model": "gemini-2.5-flash-preview-tts",
+      "creation_action": "generated_through_genblaze",
+      "materialization_action": "adopted_verified_genblaze_asset",
+      "release_action": "canonicalized_from_verified_release",
+      "source_release_id": "baseline-v1",
+      "depends_on": [
+        "dialogue.opening"
+      ],
+      "dependency_fingerprint": "c0e0b24f5726e5bd86d366f7b86e14fdf1aeb3416a7dd1fb2f0261ee6ef7e20e",
+      "remote_sha256": "7c68ff99b9f308d2ef39f26d01799289a09cbe77618e0ac793ba95728993f50f",
+      "remote_size_bytes": 127290,
+      "remote_verified": true
+    },
+    "caption.opening": {
+      "logical_id": "caption.opening",
+      "creation_action": "compiled_by_branchline",
+      "materialization_action": "canonical_repair",
+      "release_action": "canonicalized",
+      "object_key": "branchline/cas/sha256/d9/d9943ffe34a14c32dc1426e336f95a8cd5d75fd5e08987e111ca117b1960c7d0.srt",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/d9/d9943ffe34a14c32dc1426e336f95a8cd5d75fd5e08987e111ca117b1960c7d0.srt",
+      "sha256": "d9943ffe34a14c32dc1426e336f95a8cd5d75fd5e08987e111ca117b1960c7d0",
+      "size_bytes": 64,
+      "media_type": "application/x-subrip",
+      "storage_action": "reused_existing_cas_object",
+      "depends_on": [
+        "dialogue.opening"
+      ],
+      "dependency_fingerprint": "cdeb72b811657c5351508b49bb69da3cd4b2c2d88da17f1f033c9d2328af6689",
+      "remote_sha256": "d9943ffe34a14c32dc1426e336f95a8cd5d75fd5e08987e111ca117b1960c7d0",
+      "remote_size_bytes": 64,
+      "remote_verified": true
+    },
+    "thumbnail.ending_a": {
+      "logical_id": "thumbnail.ending_a",
+      "creation_action": "compiled_by_branchline",
+      "materialization_action": "canonical_repair",
+      "release_action": "canonicalized",
+      "object_key": "branchline/cas/sha256/eb/eb701130b11462a6e65915e0f6b70ae83c4c5bab6bc9b61ada7fa25ea42e125a.png",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/eb/eb701130b11462a6e65915e0f6b70ae83c4c5bab6bc9b61ada7fa25ea42e125a.png",
+      "sha256": "eb701130b11462a6e65915e0f6b70ae83c4c5bab6bc9b61ada7fa25ea42e125a",
+      "size_bytes": 27427,
+      "media_type": "image/png",
+      "storage_action": "uploaded_new_cas_object",
+      "depends_on": [
+        "image.ending_a"
+      ],
+      "dependency_fingerprint": "d2ba2f435731110d001c24e6a0b1bb58bff7edd97bc657ff282806d5d9e9cccb",
+      "remote_sha256": "eb701130b11462a6e65915e0f6b70ae83c4c5bab6bc9b61ada7fa25ea42e125a",
+      "remote_size_bytes": 27427,
+      "remote_verified": true
+    },
+    "preview.ending_a": {
+      "logical_id": "preview.ending_a",
+      "creation_action": "compiled_by_branchline",
+      "materialization_action": "canonical_repair",
+      "release_action": "canonicalized",
+      "object_key": "branchline/cas/sha256/8c/8cd1bd516fe25ecbb957bc04dd0b207118f93d4f73784c099f9464a04af698a6.mp4",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/8c/8cd1bd516fe25ecbb957bc04dd0b207118f93d4f73784c099f9464a04af698a6.mp4",
+      "sha256": "8cd1bd516fe25ecbb957bc04dd0b207118f93d4f73784c099f9464a04af698a6",
+      "size_bytes": 57098,
+      "media_type": "video/mp4",
+      "storage_action": "uploaded_new_cas_object",
+      "depends_on": [
+        "voice.opening",
+        "caption.opening",
+        "image.ending_a"
+      ],
+      "dependency_fingerprint": "eae8ee2be20e05818e7528d3654b42f3a81766b1f10a192d42a5bbe021440a84",
+      "remote_sha256": "8cd1bd516fe25ecbb957bc04dd0b207118f93d4f73784c099f9464a04af698a6",
+      "remote_size_bytes": 57098,
+      "remote_verified": true
+    },
+    "thumbnail.ending_b": {
+      "logical_id": "thumbnail.ending_b",
+      "creation_action": "compiled_by_branchline",
+      "materialization_action": "canonical_repair",
+      "release_action": "canonicalized",
+      "object_key": "branchline/cas/sha256/59/59f8792b07fd6f728a802984f95abb0d15af8991139fb4b35036f5e2671a2b12.png",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/59/59f8792b07fd6f728a802984f95abb0d15af8991139fb4b35036f5e2671a2b12.png",
+      "sha256": "59f8792b07fd6f728a802984f95abb0d15af8991139fb4b35036f5e2671a2b12",
+      "size_bytes": 25578,
+      "media_type": "image/png",
+      "storage_action": "uploaded_new_cas_object",
+      "depends_on": [
+        "image.ending_b"
+      ],
+      "dependency_fingerprint": "61a0ee00951140a19a975c75494d800e38045e3d52af4d4adeeb3501cbc717da",
+      "remote_sha256": "59f8792b07fd6f728a802984f95abb0d15af8991139fb4b35036f5e2671a2b12",
+      "remote_size_bytes": 25578,
+      "remote_verified": true
+    },
+    "preview.ending_b": {
+      "logical_id": "preview.ending_b",
+      "creation_action": "compiled_by_branchline",
+      "materialization_action": "canonical_repair",
+      "release_action": "canonicalized",
+      "object_key": "branchline/cas/sha256/28/281fc796472c67e38fbd3b572cce43fe93c8392d8d437c4ab28b245dfd1b06b0.mp4",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/28/281fc796472c67e38fbd3b572cce43fe93c8392d8d437c4ab28b245dfd1b06b0.mp4",
+      "sha256": "281fc796472c67e38fbd3b572cce43fe93c8392d8d437c4ab28b245dfd1b06b0",
+      "size_bytes": 57127,
+      "media_type": "video/mp4",
+      "storage_action": "uploaded_new_cas_object",
+      "depends_on": [
+        "voice.opening",
+        "caption.opening",
+        "image.ending_b"
+      ],
+      "dependency_fingerprint": "19536ba358b3c717d425d53854ec27aa73b5b6ede80c8cd25a3fc6a35fc07faf",
+      "remote_sha256": "281fc796472c67e38fbd3b572cce43fe93c8392d8d437c4ab28b245dfd1b06b0",
+      "remote_size_bytes": 57127,
+      "remote_verified": true
+    }
+  },
+  "paths": [
+    {
+      "path_id": "ending_a",
+      "required_assets": [
+        "voice.opening",
+        "caption.opening",
+        "thumbnail.ending_a",
+        "preview.ending_a"
+      ],
+      "missing_assets": [],
+      "failed_assets": [],
+      "verified": true
+    },
+    {
+      "path_id": "ending_b",
+      "required_assets": [
+        "voice.opening",
+        "caption.opening",
+        "thumbnail.ending_b",
+        "preview.ending_b"
+      ],
+      "missing_assets": [],
+      "failed_assets": [],
+      "verified": true
+    }
+  ],
+  "genblaze": {
+    "run_id": "c74f66dc-c630-4a11-bb7e-33b593ba9159",
+    "manifest_sha256": "76ac6a9f550749195dbf396ca927b53363ed5304657dd98fdba4f5e5d9a34375",
+    "pipeline_manifest_verified": true,
+    "stored_manifest_verified": true,
+    "canonical_hashes_match": true
+  },
+  "metrics": {
+    "assets_total": 6,
+    "assets_remote_verified": 6,
+    "paths_total": 2,
+    "paths_verified": 2
+  },
+  "publication_status": "SAFE_TO_PUBLISH",
+  "status": "CANONICAL BASELINE VERIFIED",
+  "canonical_sha256": "df56f5f4c0b0a72ea930e59a679327c148560a33bb11219bd12f192f731c781b"
+}
