@@ -1,0 +1,32 @@
+{
+  "project_id": "midnight-signal",
+  "changed_sources": [
+    "art.tunnel"
+  ],
+  "stale_assets": [
+    "card.tunnel",
+    "cut.tunnel"
+  ],
+  "reused_assets": [
+    "card.harbor",
+    "card.rooftop",
+    "cut.harbor",
+    "cut.rooftop",
+    "narration.warning",
+    "subtitle.warning"
+  ],
+  "affected_paths": [
+    "tunnel_escape"
+  ],
+  "unaffected_paths": [
+    "harbor_escape",
+    "rooftop_escape"
+  ],
+  "metrics": {
+    "source_changes": 1,
+    "assets_to_rebuild": 2,
+    "assets_to_reuse": 6,
+    "paths_affected": 1,
+    "paths_total": 3
+  }
+}

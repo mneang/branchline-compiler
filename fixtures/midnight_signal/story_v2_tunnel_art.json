@@ -1,0 +1,145 @@
+{
+  "project_id": "midnight-signal",
+  "sources": [
+    {
+      "id": "script.warning",
+      "type": "dialogue",
+      "value": "The signal is fading. Choose an escape route."
+    },
+    {
+      "id": "art.harbor",
+      "type": "image",
+      "value": {
+        "asset_ref": "original://harbor-dawn-v1",
+        "label": "HARBOR",
+        "destination": "Reach the ferry before sunrise",
+        "background": [
+          28,
+          68,
+          91
+        ]
+      }
+    },
+    {
+      "id": "art.tunnel",
+      "type": "image",
+      "value": {
+        "asset_ref": "original://tunnel-emergency-v2",
+        "label": "TUNNEL",
+        "destination": "Follow the red emergency beacons",
+        "background": [
+          91,
+          32,
+          35
+        ]
+      }
+    },
+    {
+      "id": "art.rooftop",
+      "type": "image",
+      "value": {
+        "asset_ref": "original://rooftop-storm-v1",
+        "label": "ROOFTOP",
+        "destination": "Cross above the sleeping city",
+        "background": [
+          47,
+          42,
+          76
+        ]
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "narration.warning",
+      "type": "audio",
+      "depends_on": [
+        "script.warning"
+      ]
+    },
+    {
+      "id": "subtitle.warning",
+      "type": "caption",
+      "depends_on": [
+        "script.warning"
+      ]
+    },
+    {
+      "id": "card.harbor",
+      "type": "image",
+      "depends_on": [
+        "art.harbor"
+      ]
+    },
+    {
+      "id": "card.tunnel",
+      "type": "image",
+      "depends_on": [
+        "art.tunnel"
+      ]
+    },
+    {
+      "id": "card.rooftop",
+      "type": "image",
+      "depends_on": [
+        "art.rooftop"
+      ]
+    },
+    {
+      "id": "cut.harbor",
+      "type": "video",
+      "depends_on": [
+        "narration.warning",
+        "subtitle.warning",
+        "art.harbor"
+      ]
+    },
+    {
+      "id": "cut.tunnel",
+      "type": "video",
+      "depends_on": [
+        "narration.warning",
+        "subtitle.warning",
+        "art.tunnel"
+      ]
+    },
+    {
+      "id": "cut.rooftop",
+      "type": "video",
+      "depends_on": [
+        "narration.warning",
+        "subtitle.warning",
+        "art.rooftop"
+      ]
+    }
+  ],
+  "paths": [
+    {
+      "id": "harbor_escape",
+      "required_assets": [
+        "narration.warning",
+        "subtitle.warning",
+        "card.harbor",
+        "cut.harbor"
+      ]
+    },
+    {
+      "id": "tunnel_escape",
+      "required_assets": [
+        "narration.warning",
+        "subtitle.warning",
+        "card.tunnel",
+        "cut.tunnel"
+      ]
+    },
+    {
+      "id": "rooftop_escape",
+      "required_assets": [
+        "narration.warning",
+        "subtitle.warning",
+        "card.rooftop",
+        "cut.rooftop"
+      ]
+    }
+  ]
+}
