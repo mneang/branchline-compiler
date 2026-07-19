@@ -8,6 +8,12 @@ from typing import Any
 
 from nicegui import app, ui
 
+from branchline.application.live_analysis import (
+    LiveAnalysisError,
+    analysis_metrics,
+    analyze_story_revision,
+    validate_analysis_against_release,
+)
 from branchline.presentation.flow import (
     COMPLETE,
     READY,
@@ -620,6 +626,8 @@ def index() -> None:
     state = {
         "scenario_id": "scenario_b",
         "phase": READY,
+        "analysis": None,
+        "analysis_error": None,
     }
 
     def choose_scenario(
@@ -627,12 +635,51 @@ def index() -> None:
     ) -> None:
         state["scenario_id"] = scenario_id
         state["phase"] = READY
+        state["analysis"] = None
+        state["analysis_error"] = None
         screen.refresh()
 
     def advance() -> None:
+        scenario_id = state["scenario_id"]
+        phase = state["phase"]
+
+        if (
+            phase == READY
+            and scenario_id in {
+                "scenario_a",
+                "scenario_b",
+            }
+        ):
+            try:
+                analysis = analyze_story_revision(
+                    scenario_id
+                )
+
+                planned_view = build_release_spread(
+                    scenario_id,
+                    next_phase(
+                        scenario_id,
+                        phase,
+                    ),
+                )
+
+                validate_analysis_against_release(
+                    analysis,
+                    planned_view["scenario"],
+                )
+
+                state["analysis"] = analysis
+                state["analysis_error"] = None
+
+            except LiveAnalysisError as exc:
+                state["analysis"] = None
+                state["analysis_error"] = str(exc)
+                screen.refresh()
+                return
+
         state["phase"] = next_phase(
-            state["scenario_id"],
-            state["phase"],
+            scenario_id,
+            phase,
         )
 
         screen.refresh()
@@ -647,6 +694,21 @@ def index() -> None:
         phase = view["phase"]
         scenario = view["scenario"]
         proof = scenario["provenance"]
+
+        analysis = state["analysis"]
+
+        if (
+            analysis is not None
+            and phase != READY
+        ):
+            view["active_change"] = ", ".join(
+                analysis["changed_sources"]
+            )
+
+            if phase != COMPLETE:
+                view["metrics"] = analysis_metrics(
+                    analysis
+                )
 
         with ui.dialog() as proof_dialog:
             with ui.card().classes(
@@ -755,7 +817,11 @@ def index() -> None:
                     "items-center gap-3"
                 ):
                     ui.label(
-                        "VERIFIED EVIDENCE REPLAY"
+                        (
+                            "LIVE ANALYSIS · VERIFIED EXECUTION REPLAY"
+                            if state["analysis"] is not None
+                            else "VERIFIED EVIDENCE REPLAY"
+                        )
                     ).classes(
                         "hidden md:block text-[9px] "
                         "font-black tracking-[0.14em] "
@@ -915,6 +981,56 @@ def index() -> None:
                                     render_metric(
                                         metric
                                     )
+
+                        if (
+                            analysis is not None
+                            and phase != READY
+                        ):
+                            with ui.column().classes(
+                                "gap-1 border-l-2 "
+                                "border-cyan-400/60 "
+                                "pl-3"
+                            ):
+                                ui.label(
+                                    "LIVE DEPENDENCY ANALYSIS"
+                                ).classes(
+                                    "text-[9px] font-black "
+                                    "tracking-[0.16em] "
+                                    "text-cyan-300"
+                                )
+
+                                ui.label(
+                                    "Plan "
+                                    + analysis[
+                                        "plan_sha256"
+                                    ][:16]
+                                    + "…"
+                                ).classes(
+                                    "mono text-[10px] "
+                                    "text-slate-500"
+                                )
+
+                        if state["analysis_error"]:
+                            with ui.column().classes(
+                                "gap-1 border-l-2 "
+                                "border-rose-400 "
+                                "bg-rose-950/20 p-3"
+                            ):
+                                ui.label(
+                                    "ANALYSIS STOPPED"
+                                ).classes(
+                                    "text-[9px] font-black "
+                                    "tracking-[0.16em] "
+                                    "text-rose-300"
+                                )
+
+                                ui.label(
+                                    state[
+                                        "analysis_error"
+                                    ]
+                                ).classes(
+                                    "text-xs text-rose-100"
+                                )
 
                         if phase != READY:
                             with ui.column().classes(
