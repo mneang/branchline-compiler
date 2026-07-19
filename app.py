@@ -1,4 +1,4 @@
-"""Branchline cinematic release cockpit."""
+"""Branchline manga release studio."""
 
 from __future__ import annotations
 
@@ -8,37 +8,28 @@ from typing import Any
 
 from nicegui import app, ui
 
-from branchline.presentation.anime_ui import (
-    install_anime_style,
-    render_scene_fx,
-    render_story_quote,
-)
-from branchline.presentation.cinematic import (
-    build_cinematic_view,
-)
 from branchline.presentation.flow import (
     COMPLETE,
-    PLANNED,
     READY,
     next_phase,
 )
-
-
-ART_DIRECTORY = (
-    Path(__file__).resolve().parent
-    / "assets"
-    / "ui"
+from branchline.presentation.release_spread import (
+    build_release_spread,
 )
 
-if not ART_DIRECTORY.exists():
+
+ROOT = Path(__file__).resolve().parent
+MANGA_DIRECTORY = ROOT / "assets" / "manga"
+
+if not MANGA_DIRECTORY.exists():
     raise RuntimeError(
-        "Original UI art is missing. Run "
-        "`python scripts/generate_ui_art.py`."
+        "Manga release artwork is missing. Run "
+        "`python scripts/generate_manga_release_art.py`."
     )
 
 app.add_static_files(
-    "/ui-art",
-    str(ART_DIRECTORY),
+    "/manga-art",
+    str(MANGA_DIRECTORY),
 )
 
 
@@ -46,240 +37,402 @@ ui.add_head_html(
     """
     <style>
       :root {
-        --ink: #060914;
-        --panel: rgba(12, 18, 33, .92);
-        --line: rgba(148, 163, 184, .23);
-        --muted: #94a3b8;
-        --cyan: #67e8f9;
-        --safe: #52e3a4;
-        --warning: #fbbf70;
-        --danger: #fb7185;
+        --ink: #05070c;
+        --paper: #f4f1e9;
+        --panel: #0c111c;
+        --line: rgba(226, 232, 240, .17);
+        --muted: #8d99ab;
+        --cyan: #5ed8ec;
+        --amber: #edb55d;
+        --rose: #eb6682;
+        --violet: #a993e8;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        background: var(--ink);
       }
 
       body {
-        margin: 0;
-        min-height: 100vh;
-        overflow-x: hidden;
+        overflow: hidden;
+        color: #edf2f8;
         background:
-          radial-gradient(circle at 8% 4%,
-            rgba(56, 189, 248, .15), transparent 28%),
-          radial-gradient(circle at 92% 8%,
-            rgba(217, 70, 239, .11), transparent 26%),
+          radial-gradient(
+            circle at 12% 2%,
+            rgba(94, 216, 236, .11),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 92% 8%,
+            rgba(169, 147, 232, .08),
+            transparent 27%
+          ),
           var(--ink);
-        color: #e8edf7;
       }
 
       .app-shell {
-        width: min(1400px, calc(100vw - 34px));
+        width: min(1450px, calc(100vw - 30px));
+        height: 100vh;
         margin: 0 auto;
+        padding: 13px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        box-sizing: border-box;
       }
 
-      .brand-subtitle {
-        letter-spacing: .28em;
+      .topbar {
+        min-height: 48px;
+        flex: 0 0 auto;
       }
 
-      .scenario-button {
-        min-height: 34px;
-        border-radius: 999px;
-        padding: 0 15px;
+      .brand-mark {
+        letter-spacing: .29em;
       }
 
-      .cockpit {
-        background:
-          linear-gradient(145deg,
-            rgba(17, 25, 44, .95),
-            rgba(8, 13, 25, .95));
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        box-shadow:
-          0 26px 80px rgba(0, 0, 0, .38);
-        overflow: hidden;
+      .incident-select {
+        width: 190px;
       }
 
-      .progress-rail {
+      .release-shell {
+        min-height: 0;
+        flex: 1 1 auto;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-
-      .progress-step {
-        height: 4px;
-        border-radius: 999px;
-        background: rgba(100, 116, 139, .25);
-        transition:
-          background .35s ease,
-          box-shadow .35s ease;
-      }
-
-      .progress-step.done {
-        background: linear-gradient(
-          90deg,
-          #38bdf8,
-          #67e8f9
-        );
+        grid-template-rows:
+          minmax(0, 1fr)
+          76px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: #080c14;
         box-shadow:
-          0 0 18px rgba(103, 232, 249, .35);
+          0 28px 78px rgba(0, 0, 0, .42);
       }
 
-      .hero-grid {
+      .main-grid {
+        min-height: 0;
         display: grid;
         grid-template-columns:
-          minmax(0, 1.35fr)
-          minmax(340px, .82fr);
-        min-height: 660px;
+          minmax(0, 1.58fr)
+          minmax(335px, .68fr);
       }
 
-      .scene-stage {
+      .spread-stage {
         position: relative;
-        min-height: 660px;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        background: #020306;
+        border-right: 1px solid var(--line);
+      }
+
+      .spread-panels {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns:
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+        gap: 8px;
+        padding: 8px;
+        background: #020305;
+      }
+
+      .manga-panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
         overflow: hidden;
         isolation: isolate;
-        background: #10172a;
+        background: #0c1018;
+        filter: saturate(.85);
       }
 
-      .scene-stage::after {
+      .manga-panel.left {
+        clip-path:
+          polygon(
+            0 0,
+            100% 0,
+            91% 100%,
+            0 100%
+          );
+      }
+
+      .manga-panel.right {
+        margin-left: -5%;
+        clip-path:
+          polygon(
+            9% 0,
+            100% 0,
+            100% 100%,
+            0 100%
+          );
+      }
+
+      .manga-panel::after {
         content: "";
         position: absolute;
         inset: 0;
         z-index: 2;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(3, 5, 9, .12),
+            transparent 38%,
+            rgba(3, 5, 9, .90) 100%
+          );
         pointer-events: none;
-        background:
-          linear-gradient(
-            180deg,
-            rgba(4, 8, 18, .25) 0%,
-            rgba(4, 8, 18, .02) 36%,
-            rgba(4, 8, 18, .93) 100%
-          ),
-          linear-gradient(
-            90deg,
-            rgba(4, 8, 18, .05),
-            rgba(4, 8, 18, .18)
-          );
       }
 
-      .scene-stage.blocked::after {
-        background:
-          linear-gradient(
-            180deg,
-            rgba(58, 8, 24, .28),
-            rgba(20, 5, 14, .25) 35%,
-            rgba(20, 5, 14, .96)
-          );
+      .manga-panel.warning {
+        box-shadow:
+          inset 0 0 0 3px
+          rgba(237, 181, 93, .58);
       }
 
-      .scene-image {
+      .manga-panel.safe {
+        box-shadow:
+          inset 0 0 0 3px
+          rgba(94, 216, 236, .47);
+      }
+
+      .manga-panel.blocked {
+        box-shadow:
+          inset 0 0 0 4px
+          rgba(235, 102, 130, .68);
+      }
+
+      .manga-image {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        transform: scale(1.015);
-        animation: scene-arrival .7s ease-out;
+        transform: scale(1.025);
+        animation:
+          panel-arrival .58s
+          cubic-bezier(.2, .75, .25, 1);
       }
 
-      .scene-content {
+      .panel-heading {
         position: absolute;
-        inset: 0;
-        z-index: 3;
+        z-index: 4;
+        top: 22px;
+        left: 22px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        padding: 30px;
+        gap: 5px;
       }
 
-      .scene-chip {
+      .manga-panel.right .panel-heading {
+        left: 12%;
+      }
+
+      .panel-label {
         width: fit-content;
-        border: 1px solid rgba(255, 255, 255, .28);
-        background: rgba(5, 10, 22, .52);
-        backdrop-filter: blur(10px);
-        border-radius: 999px;
-        padding: 8px 13px;
+        padding: 7px 10px;
+        color: #080b11;
+        background: rgba(245, 245, 241, .94);
+        font-size: 10px;
+        font-weight: 950;
+        letter-spacing: .17em;
+        transform: rotate(-1deg);
+        box-shadow:
+          4px 4px 0 rgba(6, 8, 12, .72);
       }
 
-      .scene-title {
-        max-width: 720px;
-        text-shadow:
-          0 5px 30px rgba(0, 0, 0, .75);
+      .panel-status {
+        width: fit-content;
+        padding: 6px 9px;
+        border-left: 3px solid var(--cyan);
+        background: rgba(4, 7, 13, .77);
+        color: #f8fafc;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: .13em;
+        backdrop-filter: blur(7px);
       }
 
-      .route-card {
-        flex: 1;
-        min-width: 180px;
-        border: 1px solid rgba(255, 255, 255, .18);
-        background: rgba(5, 10, 22, .64);
+      .warning .panel-status {
+        border-color: var(--amber);
+      }
+
+      .blocked .panel-status {
+        border-color: var(--rose);
+        color: #ffdce4;
+      }
+
+      .panel-number {
+        position: absolute;
+        z-index: 4;
+        right: 22px;
+        bottom: 104px;
+        color: rgba(255, 255, 255, .10);
+        font-family: Georgia, serif;
+        font-size: clamp(80px, 9vw, 150px);
+        font-weight: 900;
+        line-height: .8;
+      }
+
+      .story-strip {
+        position: absolute;
+        z-index: 6;
+        left: 29px;
+        right: 29px;
+        bottom: 24px;
+        display: grid;
+        grid-template-columns:
+          minmax(165px, .38fr)
+          minmax(0, 1.62fr);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .23);
+        border-left: 4px solid var(--cyan);
+        background:
+          linear-gradient(
+            90deg,
+            rgba(3, 5, 10, .94),
+            rgba(3, 5, 10, .76)
+          );
+        box-shadow:
+          0 15px 35px rgba(0, 0, 0, .38);
         backdrop-filter: blur(12px);
-        border-radius: 14px;
+      }
+
+      .story-meta {
         padding: 13px 15px;
+        border-right:
+          1px solid rgba(255, 255, 255, .15);
       }
 
-      .route-card.safe {
-        border-color: rgba(82, 227, 164, .48);
+      .story-copy {
+        padding: 13px 18px;
       }
 
-      .route-card.warning {
-        border-color: rgba(251, 191, 112, .55);
-      }
-
-      .route-card.blocked {
-        border-color: rgba(251, 113, 133, .65);
-        background: rgba(61, 13, 30, .72);
-      }
-
-      .decision-panel {
+      .decision-rail {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 17px;
+        padding: 25px;
+        box-sizing: border-box;
         background:
           linear-gradient(
             180deg,
-            rgba(11, 17, 31, .97),
-            rgba(7, 12, 23, .98)
+            #0d1422,
+            #070b13
           );
-        border-left: 1px solid var(--line);
+      }
+
+      .decision-eyebrow {
+        color: var(--cyan);
+        font-size: 10px;
+        font-weight: 950;
+        letter-spacing: .19em;
       }
 
       .active-change {
-        border: 1px solid rgba(251, 191, 112, .34);
-        background: rgba(120, 72, 22, .12);
-        border-radius: 15px;
+        padding: 13px 14px;
+        border-left: 3px solid var(--amber);
+        background: rgba(237, 181, 93, .08);
       }
 
-      .plan-block {
-        border: 1px solid var(--line);
-        background: rgba(22, 31, 52, .7);
-        border-radius: 15px;
+      .metric-row {
+        display: grid;
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+        gap: 8px;
       }
 
-      .metric-tile {
-        flex: 1;
-        min-width: 105px;
-        border: 1px solid var(--line);
-        background: rgba(21, 30, 51, .76);
-        border-radius: 14px;
-        padding: 14px;
+      .metric {
+        min-width: 0;
+        padding: 12px 10px;
+        border-top: 2px solid var(--cyan);
+        background: rgba(18, 28, 46, .72);
       }
 
-      .publication-seal {
-        border-radius: 18px;
-        padding: 18px;
+      .verdict {
+        position: relative;
+        overflow: hidden;
+        padding: 17px;
+        border: 1px solid
+          rgba(94, 216, 236, .44);
+        background:
+          rgba(20, 129, 147, .10);
       }
 
-      .publication-seal.safe {
-        border: 1px solid rgba(82, 227, 164, .5);
-        background: rgba(16, 120, 80, .14);
+      .verdict.blocked {
+        border-color:
+          rgba(235, 102, 130, .52);
+        background:
+          rgba(142, 24, 53, .12);
       }
 
-      .publication-seal.blocked {
-        border: 1px solid rgba(251, 113, 133, .58);
-        background: rgba(130, 24, 58, .16);
+      .verdict::after {
+        content: "";
+        position: absolute;
+        right: -47px;
+        top: -47px;
+        width: 115px;
+        height: 115px;
+        border:
+          1px solid rgba(94, 216, 236, .21);
+        border-radius: 50%;
       }
 
       .primary-action {
         width: 100%;
-        min-height: 55px;
-        border-radius: 14px;
-        font-weight: 900;
-        letter-spacing: .01em;
+        min-height: 52px;
+        border-radius: 0;
+        font-weight: 950;
+        letter-spacing: .015em;
+        clip-path:
+          polygon(
+            0 0,
+            96% 0,
+            100% 50%,
+            96% 100%,
+            0 100%
+          );
       }
 
-      .proof-panel {
+      .secondary-proof {
+        min-height: 30px;
+        color: #8290a4;
+      }
+
+      .sponsor-strip {
+        display: grid;
+        grid-template-columns:
+          repeat(3, minmax(0, 1fr));
+        min-height: 0;
         border-top: 1px solid var(--line);
+        background: #070a10;
+      }
+
+      .sponsor-cell {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2px;
+        padding: 10px 17px;
+        border-right: 1px solid var(--line);
+      }
+
+      .sponsor-cell:last-child {
+        border-right: 0;
+      }
+
+      .proof-dialog {
+        width: min(1080px, calc(100vw - 38px));
+        max-width: 1080px;
+        max-height: 86vh;
+        overflow-y: auto;
+        border: 1px solid var(--line);
+        background: #0a101b;
       }
 
       .mono {
@@ -293,48 +446,84 @@ ui.add_head_html(
         overflow-wrap: anywhere;
       }
 
-      @keyframes scene-arrival {
+      @keyframes panel-arrival {
         from {
-          opacity: 0;
-          transform: scale(1.045);
+          opacity: .64;
+          transform: scale(1.065);
+          filter: contrast(.75);
         }
 
         to {
           opacity: 1;
-          transform: scale(1.015);
+          transform: scale(1.025);
+          filter: contrast(1);
         }
       }
 
-      @media (max-width: 980px) {
+      @media (max-width: 990px) {
         body {
           overflow-y: auto;
         }
 
-        .hero-grid {
+        .app-shell {
+          width: min(100% - 18px, 1450px);
+          height: auto;
+          min-height: 100vh;
+        }
+
+        .release-shell {
+          grid-template-rows:
+            auto
+            auto;
+        }
+
+        .main-grid {
           grid-template-columns: 1fr;
         }
 
-        .scene-stage {
-          min-height: 530px;
+        .spread-stage {
+          min-height: 570px;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
         }
 
-        .decision-panel {
-          border-left: 0;
-          border-top: 1px solid var(--line);
+        .decision-rail {
+          min-height: 520px;
         }
       }
 
-      @media (max-width: 620px) {
-        .app-shell {
-          width: min(100% - 20px, 1400px);
+      @media (max-width: 650px) {
+        .spread-stage {
+          min-height: 525px;
         }
 
-        .scene-stage {
-          min-height: 500px;
+        .story-strip {
+          left: 14px;
+          right: 14px;
+          grid-template-columns: 1fr;
         }
 
-        .scene-content {
-          padding: 20px;
+        .story-meta {
+          display: none;
+        }
+
+        .manga-panel.right .panel-heading {
+          left: 15%;
+        }
+
+        .sponsor-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .sponsor-cell {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .manga-image {
+          animation: none;
         }
       }
     </style>
@@ -343,91 +532,85 @@ ui.add_head_html(
 )
 
 
-def metric_tile(
-    label: str,
-    value: str,
-    detail: str,
-) -> None:
-    with ui.column().classes(
-        "metric-tile gap-1"
-    ):
-        ui.label(label).classes(
-            "text-[10px] font-black "
-            "tracking-[0.16em] text-slate-500"
-        )
-
-        ui.label(value).classes(
-            "text-3xl font-black text-white"
-        )
-
-        ui.label(detail).classes(
-            "text-[11px] text-slate-400"
-        )
-
-
 def proof_row(
     label: str,
     value: Any,
 ) -> None:
     with ui.row().classes(
-        "w-full justify-between items-start "
-        "gap-4 py-2 border-b border-slate-800"
+        "w-full items-start justify-between "
+        "gap-5 py-2 border-b border-slate-800"
     ):
         ui.label(label).classes(
             "text-xs text-slate-500"
         )
 
         ui.label(str(value)).classes(
-            "mono text-xs text-slate-200 "
-            "text-right max-w-[68%]"
+            "mono max-w-[70%] text-right "
+            "text-xs text-slate-200"
         )
 
 
-def progress_rail(
-    phase: str,
+def render_panel(
+    panel: dict[str, str],
+    *,
+    position: str,
+    number: str,
 ) -> None:
-    completed = {
-        READY: 1,
-        PLANNED: 2,
-        COMPLETE: 3,
-    }[phase]
-
-    with ui.element("div").classes(
-        "progress-rail w-full"
+    with ui.element("article").classes(
+        f"manga-panel {position} {panel['tone']}"
     ):
-        for index in range(1, 4):
-            classes = (
-                "progress-step done"
-                if index <= completed
-                else "progress-step"
+        ui.image(
+            panel["image"]
+        ).props(
+            "fit=cover"
+        ).classes(
+            "manga-image"
+        )
+
+        with ui.column().classes(
+            "panel-heading"
+        ):
+            ui.label(
+                panel["label"]
+            ).classes(
+                "panel-label"
             )
 
-            ui.element("div").classes(
-                classes
+            ui.label(
+                panel["status"]
+            ).classes(
+                "panel-status"
             )
 
+        ui.label(number).classes(
+            "panel-number"
+        )
 
-def route_card(
-    route: dict[str, str],
+
+def render_metric(
+    metric: dict[str, str],
 ) -> None:
     with ui.column().classes(
-        f"route-card {route['tone']} gap-1"
+        "metric gap-0"
     ):
         ui.label(
-            route["label"]
+            metric["label"]
         ).classes(
-            "text-[11px] font-black "
-            "tracking-[0.15em] text-slate-300"
+            "text-[9px] font-black "
+            "tracking-[0.16em] text-slate-500"
         )
 
         ui.label(
-            route["status"]
+            metric["value"]
         ).classes(
-            "text-sm font-black text-white"
+            "text-2xl font-black text-white"
         )
 
-
-install_anime_style()
+        ui.label(
+            metric["detail"]
+        ).classes(
+            "text-[10px] text-slate-500"
+        )
 
 
 @ui.page("/")
@@ -456,26 +639,101 @@ def index() -> None:
 
     @ui.refreshable
     def screen() -> None:
-        experience = build_cinematic_view(
+        view = build_release_spread(
             state["scenario_id"],
             state["phase"],
         )
 
-        scenario = experience[
-            "scenario"
-        ]
+        phase = view["phase"]
+        scenario = view["scenario"]
+        proof = scenario["provenance"]
 
-        phase = experience[
-            "phase"
-        ]
+        with ui.dialog() as proof_dialog:
+            with ui.card().classes(
+                "proof-dialog p-6"
+            ):
+                with ui.row().classes(
+                    "w-full items-center "
+                    "justify-between gap-4"
+                ):
+                    with ui.column().classes(
+                        "gap-0"
+                    ):
+                        ui.label(
+                            "TECHNICAL RELEASE PROOF"
+                        ).classes(
+                            "text-[10px] font-black "
+                            "tracking-[0.18em] "
+                            "text-cyan-300"
+                        )
+
+                        ui.label(
+                            "Dependency graph, provenance, "
+                            "and remote verification"
+                        ).classes(
+                            "text-xl font-black text-white"
+                        )
+
+                    ui.button(
+                        icon="close",
+                        on_click=proof_dialog.close,
+                    ).props(
+                        "flat round dense"
+                    )
+
+                with ui.row().classes(
+                    "w-full gap-5 items-start flex-wrap"
+                ):
+                    ui.echart(
+                        scenario["graph_options"]
+                    ).style(
+                        "height: 420px; "
+                        "width: min(100%, 690px);"
+                    )
+
+                    with ui.column().classes(
+                        "flex-1 min-w-[280px]"
+                    ):
+                        proof_row(
+                            "Generation engine",
+                            proof["generation_engine"],
+                        )
+
+                        proof_row(
+                            "Provider",
+                            proof["provider"],
+                        )
+
+                        proof_row(
+                            "Model",
+                            proof["model"],
+                        )
+
+                        proof_row(
+                            "Genblaze run",
+                            proof["run_id"],
+                        )
+
+                        proof_row(
+                            "B2 release record",
+                            proof["b2_object_key"],
+                        )
+
+                        proof_row(
+                            "Remote verification",
+                            (
+                                "VERIFIED"
+                                if proof["remote_verified"]
+                                else "INCOMPLETE"
+                            ),
+                        )
 
         with ui.column().classes(
-            "app-shell min-h-screen py-4 gap-4"
+            "app-shell"
         ):
-            # Compact brand and scenario navigation.
             with ui.row().classes(
-                "w-full items-center "
-                "justify-between gap-4 flex-wrap"
+                "topbar w-full items-center "
+                "justify-between gap-4"
             ):
                 with ui.column().classes(
                     "gap-0"
@@ -483,504 +741,308 @@ def index() -> None:
                     ui.label(
                         "BRANCHLINE"
                     ).classes(
-                        "brand-subtitle text-[11px] "
+                        "brand-mark text-[10px] "
                         "font-black text-cyan-300"
                     )
 
                     ui.label(
-                        "Change one scene. "
-                        "Publish no stale branches."
+                        "Release studio for branching stories"
                     ).classes(
-                        "text-lg md:text-xl "
-                        "font-black text-white"
+                        "text-lg font-black text-white"
                     )
 
                 with ui.row().classes(
-                    "gap-2 flex-wrap"
+                    "items-center gap-3"
                 ):
-                    options = [
-                        (
-                            "scenario_b",
-                            "SELECTIVE REBUILD",
-                        ),
-                        (
-                            "scenario_c",
-                            "SAFETY CHECK",
-                        ),
-                        (
-                            "scenario_a",
-                            "SHARED CHANGE",
-                        ),
-                    ]
-
-                    for scenario_id, label in options:
-                        selected = (
-                            scenario_id
-                            == state[
-                                "scenario_id"
-                            ]
-                        )
-
-                        props = (
-                            "unelevated no-caps "
-                            "color=primary"
-                            if selected
-                            else "outline no-caps "
-                            "color=blue-grey-6"
-                        )
-
-                        ui.button(
-                            label,
-                            on_click=lambda sid=scenario_id: (
-                                choose_scenario(sid)
-                            ),
-                        ).props(
-                            props
-                        ).classes(
-                            "scenario-button text-[11px]"
-                        )
-
-            with ui.card().classes(
-                "cockpit w-full p-0"
-            ):
-                with ui.column().classes(
-                    "w-full gap-0"
-                ):
-                    with ui.column().classes(
-                        "w-full px-6 pt-5 pb-4 gap-2"
-                    ):
-                        with ui.row().classes(
-                            "w-full justify-between "
-                            "items-center"
-                        ):
-                            ui.label(
-                                experience[
-                                    "step_label"
-                                ]
-                            ).classes(
-                                "text-[10px] font-black "
-                                "tracking-[0.16em] "
-                                "text-slate-500"
-                            )
-
-                            ui.label(
-                                "VERIFIED REPLAY"
-                            ).classes(
-                                "text-[10px] font-black "
-                                "tracking-[0.14em] "
-                                "text-cyan-400"
-                            )
-
-                        progress_rail(
-                            phase
-                        )
-
-                    with ui.element(
-                        "div"
+                    ui.label(
+                        "VERIFIED EVIDENCE REPLAY"
                     ).classes(
-                        "hero-grid w-full"
+                        "hidden md:block text-[9px] "
+                        "font-black tracking-[0.14em] "
+                        "text-slate-600"
+                    )
+
+                    ui.select(
+                        options={
+                            "scenario_b": (
+                                "Selective rebuild"
+                            ),
+                            "scenario_c": (
+                                "Missing media"
+                            ),
+                            "scenario_a": (
+                                "Shared dialogue"
+                            ),
+                        },
+                        value=state["scenario_id"],
+                        on_change=lambda event: (
+                            choose_scenario(
+                                event.value
+                            )
+                        ),
+                    ).props(
+                        "dense outlined options-dense"
+                    ).classes(
+                        "incident-select"
+                    )
+
+            with ui.element("main").classes(
+                "release-shell w-full"
+            ):
+                with ui.element("div").classes(
+                    "main-grid"
+                ):
+                    with ui.element("section").classes(
+                        "spread-stage"
                     ):
-                        # Cinematic story canvas.
-                        scene_classes = (
-                            "scene-stage "
-                            f"phase-{phase} "
-                            f"accent-{experience['accent']}"
-                        )
-
-                        if experience["blocked"]:
-                            scene_classes += " blocked"
-
-                        with ui.element(
-                            "section"
-                        ).classes(
-                            scene_classes
+                        with ui.element("div").classes(
+                            "spread-panels"
                         ):
-                            ui.image(
-                                experience["image"]
-                            ).props(
-                                "fit=cover"
-                            ).classes(
-                                "scene-image"
+                            render_panel(
+                                view["panels"][0],
+                                position="left",
+                                number="A",
                             )
 
-                            render_scene_fx(
-                                experience
+                            render_panel(
+                                view["panels"][1],
+                                position="right",
+                                number="B",
                             )
 
-                            with ui.element(
-                                "div"
-                            ).classes(
-                                "scene-content"
-                            ):
-                                with ui.row().classes(
-                                    "w-full justify-between "
-                                    "items-start gap-3"
-                                ):
-                                    ui.label(
-                                        experience[
-                                            "story_label"
-                                        ]
-                                    ).classes(
-                                        "scene-chip text-[10px] "
-                                        "font-black tracking-[0.16em]"
-                                    )
-
-                                    ui.label(
-                                        experience[
-                                            "route_label"
-                                        ]
-                                    ).classes(
-                                        "scene-chip text-[10px] "
-                                        "font-black tracking-[0.16em]"
-                                    )
-
-                                with ui.column().classes(
-                                    "gap-5"
-                                ):
-                                    if experience[
-                                        "blocked"
-                                    ]:
-                                        with ui.row().classes(
-                                            "items-center gap-2"
-                                        ):
-                                            ui.icon(
-                                                "lock"
-                                            ).classes(
-                                                "text-rose-300 text-2xl"
-                                            )
-
-                                            ui.label(
-                                                "ROUTE LOCKED"
-                                            ).classes(
-                                                "font-black "
-                                                "tracking-[0.16em] "
-                                                "text-rose-200"
-                                            )
-
-                                    with ui.column().classes(
-                                        "scene-title gap-2"
-                                    ):
-                                        ui.label(
-                                            experience[
-                                                "chapter_label"
-                                            ]
-                                        ).classes(
-                                            "text-[10px] font-black "
-                                            "tracking-[0.18em] "
-                                            "text-cyan-200/90"
-                                        )
-
-                                        render_story_quote(
-                                            experience
-                                        )
-
-                                        ui.label(
-                                            experience[
-                                                "scene_title"
-                                            ]
-                                        ).classes(
-                                            "text-3xl md:text-5xl "
-                                            "font-black leading-tight "
-                                            "text-white"
-                                        )
-
-                                        ui.label(
-                                            experience[
-                                                "scene_caption"
-                                            ]
-                                        ).classes(
-                                            "max-w-2xl text-sm "
-                                            "md:text-base leading-relaxed "
-                                            "text-slate-200"
-                                        )
-
-                                    with ui.row().classes(
-                                        "w-full gap-3 flex-wrap"
-                                    ):
-                                        for route in experience[
-                                            "route_cards"
-                                        ]:
-                                            route_card(
-                                                route
-                                            )
-
-                        # Focused creator decision.
-                        with ui.column().classes(
-                            "decision-panel p-6 gap-5"
+                        with ui.element("div").classes(
+                            "story-strip"
                         ):
                             with ui.column().classes(
-                                "gap-2"
+                                "story-meta gap-1"
                             ):
                                 ui.label(
-                                    experience[
-                                        "copy"
-                                    ]["headline"]
+                                    view["story_label"]
                                 ).classes(
-                                    "text-2xl md:text-3xl "
-                                    "font-black leading-tight "
+                                    "text-[9px] font-black "
+                                    "tracking-[0.15em] "
+                                    "text-cyan-300"
+                                )
+
+                                ui.label(
+                                    view["chapter_label"]
+                                ).classes(
+                                    "text-xs font-bold "
+                                    "text-white"
+                                )
+
+                            with ui.column().classes(
+                                "story-copy gap-1"
+                            ):
+                                ui.label(
+                                    "CURRENT STORY LINE"
+                                ).classes(
+                                    "text-[8px] font-black "
+                                    "tracking-[0.18em] "
+                                    "text-slate-500"
+                                )
+
+                                ui.label(
+                                    f"“{view['dialogue_line']}”"
+                                ).classes(
+                                    "text-sm md:text-base "
+                                    "font-semibold text-white"
+                                )
+
+                    with ui.element("aside").classes(
+                        "decision-rail"
+                    ):
+                        with ui.column().classes(
+                            "gap-2"
+                        ):
+                            ui.label(
+                                view["copy"]["eyebrow"]
+                            ).classes(
+                                "decision-eyebrow"
+                            )
+
+                            ui.label(
+                                view["copy"]["title"]
+                            ).classes(
+                                "text-3xl md:text-4xl "
+                                "font-black leading-tight "
+                                "text-white"
+                            )
+
+                            ui.label(
+                                view["copy"]["body"]
+                            ).classes(
+                                "text-sm leading-relaxed "
+                                "text-slate-400"
+                            )
+
+                        if phase == READY:
+                            with ui.column().classes(
+                                "active-change gap-1"
+                            ):
+                                ui.label(
+                                    "ACTIVE CHANGE"
+                                ).classes(
+                                    "text-[9px] font-black "
+                                    "tracking-[0.16em] "
+                                    "text-amber-300"
+                                )
+
+                                ui.label(
+                                    view["active_change"]
+                                ).classes(
+                                    "mono text-sm font-bold "
                                     "text-white"
                                 )
 
                                 ui.label(
-                                    experience[
-                                        "copy"
-                                    ]["supporting"]
+                                    "Impact has not been "
+                                    "calculated yet."
                                 ).classes(
-                                    "text-sm leading-relaxed "
-                                    "text-slate-400"
+                                    "text-[11px] "
+                                    "text-slate-500"
                                 )
 
-                            if phase == READY:
-                                with ui.column().classes(
-                                    "active-change p-4 gap-2"
-                                ):
-                                    ui.label(
-                                        "ACTIVE CHANGE"
-                                    ).classes(
-                                        "text-[10px] font-black "
-                                        "tracking-[0.16em] "
-                                        "text-amber-300"
-                                    )
-
-                                    ui.label(
-                                        experience[
-                                            "active_change"
-                                        ]
-                                    ).classes(
-                                        "mono text-base "
-                                        "font-bold text-white"
-                                    )
-
-                                    ui.label(
-                                        "No release decision has "
-                                        "been revealed yet."
-                                    ).classes(
-                                        "text-xs text-slate-500"
-                                    )
-
-                            if phase == PLANNED:
-                                with ui.row().classes(
-                                    "w-full gap-3"
-                                ):
-                                    for metric in experience[
-                                        "summary_metrics"
-                                    ]:
-                                        metric_tile(
-                                            metric[
-                                                "label"
-                                            ],
-                                            metric[
-                                                "value"
-                                            ],
-                                            metric[
-                                                "detail"
-                                            ],
-                                        )
-
-                                with ui.column().classes(
-                                    "plan-block p-4 gap-3"
-                                ):
-                                    ui.label(
-                                        "EXACT PLAN"
-                                    ).classes(
-                                        "text-[10px] font-black "
-                                        "tracking-[0.16em] "
-                                        "text-slate-500"
-                                    )
-
-                                    for asset_id in scenario[
-                                        "rebuilt_assets"
-                                    ]:
-                                        with ui.row().classes(
-                                            "w-full items-center gap-2"
-                                        ):
-                                            ui.icon(
-                                                "auto_fix_high"
-                                            ).classes(
-                                                "text-rose-300"
-                                            )
-
-                                            ui.label(
-                                                asset_id
-                                            ).classes(
-                                                "mono text-xs "
-                                                "text-slate-200"
-                                            )
-
-                                    if scenario[
-                                        "reused_assets"
-                                    ]:
-                                        ui.separator().classes(
-                                            "bg-slate-800"
-                                        )
-
-                                        ui.label(
-                                            f"{len(scenario['reused_assets'])} "
-                                            "verified B2 assets remain "
-                                            "byte-identical."
-                                        ).classes(
-                                            "text-xs text-emerald-300"
-                                        )
-
-                            if phase == COMPLETE:
-                                seal_class = (
-                                    "publication-seal blocked"
-                                    if experience[
-                                        "blocked"
-                                    ]
-                                    else "publication-seal safe"
-                                )
-
-                                with ui.column().classes(
-                                    f"{seal_class} gap-1"
-                                ):
-                                    ui.label(
-                                        "PUBLICATION DECISION"
-                                    ).classes(
-                                        "text-[10px] font-black "
-                                        "tracking-[0.16em] "
-                                        "text-slate-400"
-                                    )
-
-                                    ui.label(
-                                        scenario[
-                                            "publication_status"
-                                        ]
-                                    ).classes(
-                                        "text-2xl font-black "
-                                        "text-white"
-                                    )
-
-                                    ui.label(
-                                        (
-                                            "Unsafe route stopped "
-                                            "before release."
-                                            if experience[
-                                                "blocked"
-                                            ]
-                                            else
-                                            "Mission completed "
-                                            "and verified."
-                                        )
-                                    ).classes(
-                                        "text-xs text-slate-300"
-                                    )
-
-                                with ui.row().classes(
-                                    "w-full gap-3"
-                                ):
-                                    for metric in experience[
-                                        "summary_metrics"
-                                    ]:
-                                        metric_tile(
-                                            metric[
-                                                "label"
-                                            ],
-                                            metric[
-                                                "value"
-                                            ],
-                                            metric[
-                                                "detail"
-                                            ],
-                                        )
-
-                            with ui.column().classes(
-                                "mt-auto gap-3"
+                        if view["metrics"]:
+                            with ui.element(
+                                "div"
+                            ).classes(
+                                "metric-row"
                             ):
-                                ui.button(
-                                    experience[
-                                        "primary_action"
-                                    ],
-                                    on_click=advance,
-                                ).props(
-                                    "unelevated no-caps "
-                                    "color=primary"
+                                for metric in view[
+                                    "metrics"
+                                ]:
+                                    render_metric(
+                                        metric
+                                    )
+
+                        if phase != READY:
+                            with ui.column().classes(
+                                "gap-2 border-l-2 "
+                                "border-cyan-500/50 "
+                                "pl-3"
+                            ):
+                                ui.label(
+                                    (
+                                        "APPROVAL-SAFE PLAN"
+                                        if phase != COMPLETE
+                                        else
+                                        "VERIFIED OUTCOME"
+                                    )
                                 ).classes(
-                                    "primary-action"
+                                    "text-[9px] font-black "
+                                    "tracking-[0.16em] "
+                                    "text-slate-500"
                                 )
 
                                 ui.label(
-                                    "Real stored evidence. "
-                                    "No cached result is labeled live."
+                                    view["copy"]["body"]
                                 ).classes(
-                                    "text-[10px] text-center "
-                                    "text-slate-600"
+                                    "text-xs leading-relaxed "
+                                    "text-slate-300"
                                 )
 
-                    # Optional proof stays below the primary interaction.
-                    if phase != READY:
-                        with ui.expansion(
-                            "Inspect dependency graph and sponsor proof",
-                            icon="verified",
-                        ).classes(
-                            "proof-panel w-full "
-                            "px-6 py-2"
-                        ):
-                            with ui.row().classes(
-                                "w-full gap-5 "
-                                "items-start flex-wrap py-4"
+                        if phase == COMPLETE:
+                            verdict_class = (
+                                "verdict blocked"
+                                if view["blocked"]
+                                else "verdict"
+                            )
+
+                            with ui.column().classes(
+                                f"{verdict_class} gap-1"
                             ):
-                                ui.echart(
-                                    scenario[
-                                        "graph_options"
-                                    ]
-                                ).style(
-                                    "height: 360px; "
-                                    "width: min(100%, 720px);"
+                                ui.label(
+                                    "PUBLICATION DECISION"
+                                ).classes(
+                                    "text-[9px] font-black "
+                                    "tracking-[0.17em] "
+                                    "text-slate-500"
                                 )
 
-                                proof = scenario[
-                                    "provenance"
-                                ]
+                                ui.label(
+                                    view[
+                                        "publication_status"
+                                    ]
+                                ).classes(
+                                    "text-2xl font-black "
+                                    "text-white"
+                                )
 
-                                with ui.column().classes(
-                                    "flex-1 min-w-[280px]"
-                                ):
-                                    proof_row(
-                                        "Generation engine",
-                                        proof[
-                                            "generation_engine"
-                                        ],
+                                ui.label(
+                                    (
+                                        "Unsafe route stopped "
+                                        "before release."
+                                        if view["blocked"]
+                                        else
+                                        "Mission completed "
+                                        "and verified."
                                     )
+                                ).classes(
+                                    "text-xs text-slate-300"
+                                )
 
-                                    proof_row(
-                                        "Provider",
-                                        proof[
-                                            "provider"
-                                        ],
-                                    )
+                        with ui.column().classes(
+                            "mt-auto w-full gap-1"
+                        ):
+                            action_props = (
+                                "outline no-caps "
+                                "color=blue-grey-5"
+                                if phase == COMPLETE
+                                else
+                                "unelevated no-caps "
+                                "color=primary"
+                            )
 
-                                    proof_row(
-                                        "Model",
-                                        proof[
-                                            "model"
-                                        ],
-                                    )
+                            ui.button(
+                                view["action_label"],
+                                on_click=advance,
+                            ).props(
+                                action_props
+                            ).classes(
+                                "primary-action"
+                            )
 
-                                    proof_row(
-                                        "Genblaze run",
-                                        proof[
-                                            "run_id"
-                                        ],
-                                    )
+                            ui.button(
+                                "View technical proof",
+                                on_click=proof_dialog.open,
+                            ).props(
+                                "flat dense no-caps"
+                            ).classes(
+                                "secondary-proof w-full "
+                                "text-xs"
+                            )
 
-                                    proof_row(
-                                        "B2 record",
-                                        proof[
-                                            "b2_object_key"
-                                        ],
-                                    )
+                with ui.element("footer").classes(
+                    "sponsor-strip"
+                ):
+                    for item in view[
+                        "sponsor_strip"
+                    ]:
+                        with ui.column().classes(
+                            "sponsor-cell"
+                        ):
+                            ui.label(
+                                item["label"]
+                            ).classes(
+                                "text-[8px] font-black "
+                                "tracking-[0.17em] "
+                                "text-cyan-300"
+                            )
 
-                                    proof_row(
-                                        "Remote verification",
-                                        (
-                                            "VERIFIED"
-                                            if proof[
-                                                "remote_verified"
-                                            ]
-                                            else "INCOMPLETE"
-                                        ),
-                                    )
+                            ui.label(
+                                item["value"]
+                            ).classes(
+                                "truncate text-xs "
+                                "font-bold text-white"
+                            )
+
+                            ui.label(
+                                item["detail"]
+                            ).classes(
+                                "truncate text-[9px] "
+                                "text-slate-600"
+                            )
 
     screen()
 

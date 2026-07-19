@@ -623,6 +623,13 @@ def build_scenario_view(
         "hero": config["hero"],
         "mode": "VERIFIED REPLAY",
         "project_id": story["project_id"],
+        "release_id": evidence.get("release_id"),
+        "raw_metrics": dict(
+            evidence.get("metrics", {})
+        ),
+        "approval": dict(
+            evidence.get("approval", {})
+        ),
         "changed_sources": sorted(
             evidence.get("changed_sources", [])
         ),
