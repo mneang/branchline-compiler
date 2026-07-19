@@ -1,0 +1,10 @@
+{
+  "approval_id": "a0c7ea1e-d06e-4007-a058-df45c5eae15e",
+  "project_id": "last-train",
+  "plan_sha256": "f180ae1dc8fe0f87b21281ef512017c1fae05bbd06151a9901475ba300d2b485",
+  "decision": "approved",
+  "approved_by": "mneang",
+  "approved_at": "2026-07-19T02:20:37.898894+00:00",
+  "note": "Approve rebuilding only Ending B thumbnail and preview.",
+  "status": "REBUILD APPROVED"
+}
