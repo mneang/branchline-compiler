@@ -122,13 +122,11 @@ def verify_canonical_release(
 def require_b2_environment() -> dict[str, str]:
     env_path = Path(".env").resolve()
 
-    if not env_path.exists():
-        raise ScenarioBReleaseError(".env is missing")
-
-    load_dotenv(
-        dotenv_path=env_path,
-        override=False,
-    )
+    if env_path.exists():
+        load_dotenv(
+            dotenv_path=env_path,
+            override=False,
+        )
 
     names = (
         "B2_BUCKET_NAME",

@@ -29,7 +29,9 @@ def test_mode_is_labeled_truthfully() -> None:
         in source
     )
 
-    assert "LIVE EXECUTION" not in source
+    assert "LIVE B2 EXECUTION" in source
+    assert "VERIFIED_REPLAY_FALLBACK" in source
+    assert "execute_scenario_b_release" in source
 
 
 def test_analysis_failure_stops_progression() -> None:
