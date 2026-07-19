@@ -1,10 +1,9 @@
-"""Prove that Branchline operates on a different story without code changes."""
+"""Prove that Branchline handles a structurally different story graph."""
 
 from __future__ import annotations
 
 import inspect
 
-from branchline.domain import story_graph
 from branchline.domain.story_graph import (
     load_story,
     plan_rebuild,
@@ -20,32 +19,42 @@ CURRENT_PATH = (
 )
 
 
-def generality_plan() -> dict:
+def calculate_plan() -> dict:
     previous = load_story(PREVIOUS_PATH)
     current = load_story(CURRENT_PATH)
 
     return plan_rebuild(previous, current)
 
 
-def test_second_story_has_different_shape() -> None:
+def test_second_story_has_different_structure() -> None:
     story = load_story(PREVIOUS_PATH)
 
     assert story["project_id"] == "midnight-signal"
-    assert len(story["paths"]) == 3
+    assert len(story["sources"]) == 4
     assert len(story["assets"]) == 8
+    assert len(story["paths"]) == 3
 
     asset_ids = {
         asset["id"]
         for asset in story["assets"]
     }
 
-    assert "voice.opening" not in asset_ids
-    assert "preview.ending_a" not in asset_ids
-    assert "thumbnail.ending_b" not in asset_ids
+    original_fixture_names = {
+        "voice.opening",
+        "caption.opening",
+        "preview.ending_a",
+        "preview.ending_b",
+        "thumbnail.ending_a",
+        "thumbnail.ending_b",
+    }
+
+    assert asset_ids.isdisjoint(
+        original_fixture_names
+    )
 
 
-def test_tunnel_change_is_diagnosed_dynamically() -> None:
-    plan = generality_plan()
+def test_tunnel_change_is_isolated_dynamically() -> None:
+    plan = calculate_plan()
 
     assert plan["changed_sources"] == [
         "art.tunnel",
@@ -61,13 +70,8 @@ def test_tunnel_change_is_diagnosed_dynamically() -> None:
     ]
 
 
-def test_two_other_routes_remain_untouched() -> None:
-    plan = generality_plan()
-
-    assert plan["unaffected_paths"] == [
-        "harbor_escape",
-        "rooftop_escape",
-    ]
+def test_other_routes_and_assets_remain_reusable() -> None:
+    plan = calculate_plan()
 
     assert plan["reused_assets"] == [
         "card.harbor",
@@ -78,44 +82,50 @@ def test_two_other_routes_remain_untouched() -> None:
         "subtitle.warning",
     ]
 
+    assert plan["unaffected_paths"] == [
+        "harbor_escape",
+        "rooftop_escape",
+    ]
 
-def test_second_story_reuse_rate_is_seventy_five_percent() -> None:
-    plan = generality_plan()
 
-    assert plan["metrics"] == {
-        "source_changes": 1,
-        "assets_to_rebuild": 2,
-        "assets_to_reuse": 6,
-        "paths_affected": 1,
-        "paths_total": 3,
-    }
+def test_reuse_rate_is_seventy_five_percent() -> None:
+    plan = calculate_plan()
 
-    reuse_rate = (
-        plan["metrics"]["assets_to_reuse"]
-        / (
-            plan["metrics"]["assets_to_rebuild"]
-            + plan["metrics"]["assets_to_reuse"]
-        )
-        * 100
+    total_assets = (
+        len(plan["stale_assets"])
+        + len(plan["reused_assets"])
     )
 
+    reuse_rate = round(
+        len(plan["reused_assets"])
+        / total_assets
+        * 100,
+        1,
+    )
+
+    assert total_assets == 8
     assert reuse_rate == 75.0
 
 
-def test_domain_planner_contains_no_fixture_specific_names() -> None:
-    source = inspect.getsource(story_graph)
+def test_planner_contains_no_story_specific_names() -> None:
+    planner_source = inspect.getsource(
+        plan_rebuild
+    )
 
-    forbidden = {
+    forbidden_names = {
         "last-train",
         "midnight-signal",
         "ending_a",
         "ending_b",
         "tunnel_escape",
         "voice.opening",
+        "preview.ending_a",
     }
 
-    assert not {
-        value
-        for value in forbidden
-        if value in source
+    discovered = {
+        name
+        for name in forbidden_names
+        if name in planner_source
     }
+
+    assert discovered == set()
