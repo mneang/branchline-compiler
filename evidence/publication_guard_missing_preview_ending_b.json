@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "project_id": "last-train",
+  "release_id": "missing-preview-ending-b-v3",
+  "assets": {
+    "caption.opening": {
+      "logical_id": "caption.opening",
+      "object_key": "branchline/cas/sha256/11/117b8b93a11e32ffc780b923e51d68330596f2f1e4e07ed7817d299975bdd4b9.srt",
+      "expected_sha256": "117b8b93a11e32ffc780b923e51d68330596f2f1e4e07ed7817d299975bdd4b9",
+      "actual_sha256": "117b8b93a11e32ffc780b923e51d68330596f2f1e4e07ed7817d299975bdd4b9",
+      "expected_size_bytes": 64,
+      "actual_size_bytes": 64,
+      "remote_retrieved": true,
+      "issues": [],
+      "verified": true
+    },
+    "preview.ending_a": {
+      "logical_id": "preview.ending_a",
+      "object_key": "branchline/cas/sha256/ef/eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040.mp4",
+      "expected_sha256": "eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040",
+      "actual_sha256": "eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040",
+      "expected_size_bytes": 55905,
+      "actual_size_bytes": 55905,
+      "remote_retrieved": true,
+      "issues": [],
+      "verified": true
+    },
+    "preview.ending_b": {
+      "logical_id": "preview.ending_b",
+      "object_key": "branchline/projects/last-train/candidates/missing-preview-ending-b-v3/intentionally-missing/preview.ending_b.mp4",
+      "expected_sha256": "673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76",
+      "actual_sha256": null,
+      "expected_size_bytes": 55925,
+      "actual_size_bytes": null,
+      "remote_retrieved": false,
+      "issues": [
+        {
+          "code": "remote_object_missing",
+          "logical_id": "preview.ending_b",
+          "detail": "The required B2 object does not exist."
+        }
+      ],
+      "verified": false
+    },
+    "thumbnail.ending_a": {
+      "logical_id": "thumbnail.ending_a",
+      "object_key": "branchline/cas/sha256/c6/c6ff825e299059c13605c3872f5459636b8c0207ffc048ab383850e9f971cdb3.png",
+      "expected_sha256": "c6ff825e299059c13605c3872f5459636b8c0207ffc048ab383850e9f971cdb3",
+      "actual_sha256": "c6ff825e299059c13605c3872f5459636b8c0207ffc048ab383850e9f971cdb3",
+      "expected_size_bytes": 26237,
+      "actual_size_bytes": 26237,
+      "remote_retrieved": true,
+      "issues": [],
+      "verified": true
+    },
+    "thumbnail.ending_b": {
+      "logical_id": "thumbnail.ending_b",
+      "object_key": "branchline/cas/sha256/f8/f84e22afcde22772d420ddef38003fc1f4bca79a2dd6db18d9f6f45e4a05289c.png",
+      "expected_sha256": "f84e22afcde22772d420ddef38003fc1f4bca79a2dd6db18d9f6f45e4a05289c",
+      "actual_sha256": "f84e22afcde22772d420ddef38003fc1f4bca79a2dd6db18d9f6f45e4a05289c",
+      "expected_size_bytes": 24967,
+      "actual_size_bytes": 24967,
+      "remote_retrieved": true,
+      "issues": [],
+      "verified": true
+    },
+    "voice.opening": {
+      "logical_id": "voice.opening",
+      "object_key": "branchline/genblaze/assets/62/ba/62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464.wav",
+      "expected_sha256": "62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464",
+      "actual_sha256": "62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464",
+      "expected_size_bytes": 123450,
+      "actual_size_bytes": 123450,
+      "remote_retrieved": true,
+      "issues": [],
+      "verified": true
+    }
+  },
+  "paths": [
+    {
+      "path_id": "ending_a",
+      "required_assets": [
+        "voice.opening",
+        "caption.opening",
+        "thumbnail.ending_a",
+        "preview.ending_a"
+      ],
+      "blocked_assets": [],
+      "verified": true,
+      "status": "VERIFIED"
+    },
+    {
+      "path_id": "ending_b",
+      "required_assets": [
+        "voice.opening",
+        "caption.opening",
+        "thumbnail.ending_b",
+        "preview.ending_b"
+      ],
+      "blocked_assets": [
+        "preview.ending_b"
+      ],
+      "verified": false,
+      "status": "BLOCKED"
+    }
+  ],
+  "blocking_issues": [
+    {
+      "code": "remote_object_missing",
+      "logical_id": "preview.ending_b",
+      "detail": "The required B2 object does not exist."
+    }
+  ],
+  "failed_assets": [
+    "preview.ending_b"
+  ],
+  "verified_assets": [
+    "caption.opening",
+    "preview.ending_a",
+    "thumbnail.ending_a",
+    "thumbnail.ending_b",
+    "voice.opening"
+  ],
+  "blocked_paths": [
+    "ending_b"
+  ],
+  "verified_paths": [
+    "ending_a"
+  ],
+  "metrics": {
+    "assets_total": 6,
+    "assets_verified": 5,
+    "assets_failed": 1,
+    "paths_total": 2,
+    "paths_verified": 1,
+    "paths_blocked": 1,
+    "blocking_issues": 1
+  },
+  "publication_status": "BLOCKED",
+  "status": "PUBLICATION BLOCKED",
+  "scenario": "C",
+  "scenario_type": "missing_remote_object",
+  "source_release_id": "shared-dialogue-v2",
+  "candidate_manifest_object_key": "branchline/projects/last-train/candidates/missing-preview-ending-b-v3/candidate.json",
+  "guard_report_object_key": "branchline/projects/last-train/candidates/missing-preview-ending-b-v3/publication-guard.json",
+  "missing_asset_object_key": "branchline/projects/last-train/candidates/missing-preview-ending-b-v3/intentionally-missing/preview.ending_b.mp4",
+  "missing_asset_absence_verified": true,
+  "canonical_sha256": "a45475d6d24dcdf589ca2f1c1fc26f14b8b735be9c746017f3201b144babe531"
+}

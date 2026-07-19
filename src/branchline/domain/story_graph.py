@@ -163,3 +163,69 @@ def plan_rebuild(
             "paths_total": len(current_story["paths"]),
         },
     }
+
+
+def asset_dependency_fingerprint(
+    asset_id: str,
+    *,
+    story: dict[str, Any],
+    source_digest_by_id: dict[str, str] | None = None,
+    memo: dict[str, str] | None = None,
+) -> str:
+    """Calculate the expected dependency fingerprint for one asset."""
+    assets = {
+        asset["id"]: asset
+        for asset in story["assets"]
+    }
+
+    if asset_id not in assets:
+        raise ValueError(f"Unknown asset: {asset_id}")
+
+    if source_digest_by_id is None:
+        source_digest_by_id = source_hashes(story)
+
+    if memo is None:
+        memo = {}
+
+    if asset_id in memo:
+        return memo[asset_id]
+
+    dependencies: list[dict[str, str]] = []
+
+    for dependency in sorted(
+        assets[asset_id]["depends_on"]
+    ):
+        if dependency in source_digest_by_id:
+            dependency_hash = source_digest_by_id[
+                dependency
+            ]
+        elif dependency in assets:
+            dependency_hash = asset_dependency_fingerprint(
+                dependency,
+                story=story,
+                source_digest_by_id=source_digest_by_id,
+                memo=memo,
+            )
+        else:
+            raise ValueError(
+                f"Asset {asset_id} references "
+                f"unknown dependency {dependency}"
+            )
+
+        dependencies.append(
+            {
+                "id": dependency,
+                "sha256": dependency_hash,
+            }
+        )
+
+    fingerprint = canonical_hash(
+        {
+            "asset_id": asset_id,
+            "dependencies": dependencies,
+        }
+    )
+
+    memo[asset_id] = fingerprint
+    return fingerprint
+
