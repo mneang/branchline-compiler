@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import tempfile
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -84,6 +85,191 @@ RELEASE_KEY = (
 
 class SelectiveReleaseError(RuntimeError):
     """Raised when a selective release cannot be safely produced."""
+
+
+
+@dataclass(frozen=True)
+class _RunReference:
+    """Minimal previous-run reference accepted by Pipeline.from_result."""
+
+    run_id: str
+
+
+@dataclass(frozen=True)
+class _ResultReference:
+    """Minimal previous-result reference for Genblaze iteration."""
+
+    run: _RunReference
+
+
+def require_parent_run_id(
+    baseline: dict[str, Any],
+) -> str:
+    """Require the verified baseline's real Genblaze run ID."""
+    parent_run_id = str(
+        baseline.get(
+            "genblaze",
+            {},
+        ).get(
+            "run_id",
+            "",
+        )
+    ).strip()
+
+    if not parent_run_id:
+        raise SelectiveReleaseError(
+            "Verified baseline has no Genblaze run_id "
+            "for iteration lineage"
+        )
+
+    return parent_run_id
+
+
+def build_lineage_pipeline(
+    parent_run_id: str,
+    *,
+    pipeline_factory: Any = Pipeline,
+) -> Any:
+    """Create the selective pipeline as an official Genblaze iteration."""
+    normalized = str(
+        parent_run_id
+    ).strip()
+
+    if not normalized:
+        raise SelectiveReleaseError(
+            "Genblaze parent_run_id cannot be empty"
+        )
+
+    previous = _ResultReference(
+        run=_RunReference(
+            run_id=normalized
+        )
+    )
+
+    return (
+        pipeline_factory(
+            "branchline-selective-shared-dialogue"
+        )
+        .from_result(previous)
+    )
+
+
+def extract_parent_run_id(
+    value: Any,
+) -> str | None:
+    """Find parent_run_id in a Run, Manifest, or serialized model."""
+    visited: set[int] = set()
+
+    def visit(
+        current: Any,
+    ) -> str | None:
+        if current is None:
+            return None
+
+        current_id = id(current)
+
+        if current_id in visited:
+            return None
+
+        visited.add(current_id)
+
+        if isinstance(
+            current,
+            dict,
+        ):
+            direct = current.get(
+                "parent_run_id"
+            )
+
+            if direct:
+                return str(
+                    direct
+                ).strip() or None
+
+            for nested in current.values():
+                result = visit(
+                    nested
+                )
+
+                if result:
+                    return result
+
+            return None
+
+        if isinstance(
+            current,
+            (
+                list,
+                tuple,
+            ),
+        ):
+            for nested in current:
+                result = visit(
+                    nested
+                )
+
+                if result:
+                    return result
+
+            return None
+
+        direct = getattr(
+            current,
+            "parent_run_id",
+            None,
+        )
+
+        if direct:
+            return str(
+                direct
+            ).strip() or None
+
+        run = getattr(
+            current,
+            "run",
+            None,
+        )
+
+        if run is not None:
+            result = visit(
+                run
+            )
+
+            if result:
+                return result
+
+        model_dump = getattr(
+            current,
+            "model_dump",
+            None,
+        )
+
+        if callable(model_dump):
+            try:
+                return visit(
+                    model_dump(
+                        mode="json"
+                    )
+                )
+            except TypeError:
+                return visit(
+                    model_dump()
+                )
+
+        dictionary = getattr(
+            current,
+            "dict",
+            None,
+        )
+
+        if callable(dictionary):
+            return visit(
+                dictionary()
+            )
+
+        return None
+
+    return visit(value)
 
 
 def verify_release_canonical_hash(
@@ -192,6 +378,7 @@ def generate_updated_voice(
     env: dict[str, str],
     dialogue: str,
     work_dir: Path,
+    parent_run_id: str,
 ) -> dict[str, Any]:
     """Generate the changed voice through Genblaze and persist it to B2."""
     provider = GeminiTTSProvider(
@@ -205,13 +392,15 @@ def generate_updated_voice(
         key_strategy=KeyStrategy.CONTENT_ADDRESSABLE,
     )
 
+    pipeline = build_lineage_pipeline(
+        parent_run_id
+    )
+
     result = None
 
     try:
         result = (
-            Pipeline(
-                "branchline-selective-shared-dialogue"
-            )
+            pipeline
             .step(
                 provider,
                 model=MODEL,
@@ -253,6 +442,19 @@ def generate_updated_voice(
     ):
         raise SelectiveReleaseError(
             "Genblaze returned no voice asset"
+        )
+
+    actual_parent_run_id = (
+        extract_parent_run_id(
+            result.run
+        )
+    )
+
+    if actual_parent_run_id != parent_run_id:
+        raise SelectiveReleaseError(
+            "Genblaze result lineage mismatch: "
+            f"{actual_parent_run_id!r} != "
+            f"{parent_run_id!r}"
         )
 
     asset = result.run.steps[0].assets[0]
@@ -305,6 +507,24 @@ def generate_updated_voice(
         == stored_manifest.canonical_hash
     )
 
+    stored_parent_run_id = (
+        extract_parent_run_id(
+            stored_manifest
+        )
+    )
+
+    lineage_verified = (
+        actual_parent_run_id
+        == parent_run_id
+        == stored_parent_run_id
+    )
+
+    if not lineage_verified:
+        raise SelectiveReleaseError(
+            "Stored Genblaze manifest did not "
+            "round-trip parent_run_id"
+        )
+
     if not all(
         (
             pipeline_manifest_verified,
@@ -332,6 +552,15 @@ def generate_updated_voice(
         "model": MODEL,
         "voice": VOICE,
         "run_id": result.run.run_id,
+        "parent_run_id": (
+            actual_parent_run_id
+        ),
+        "stored_parent_run_id": (
+            stored_parent_run_id
+        ),
+        "lineage_verified": (
+            lineage_verified
+        ),
         "manifest_sha256": (
             result.manifest.canonical_hash
         ),
@@ -582,7 +811,8 @@ def main() -> int:
             env=env,
             dialogue=dialogue,
             work_dir=work_dir,
-        )
+
+            parent_run_id=require_parent_run_id(baseline),)
 
         assets["voice.opening"] = {
             "logical_id": "voice.opening",
@@ -945,6 +1175,15 @@ def main() -> int:
             "paths": paths,
             "genblaze": {
                 "run_id": voice["run_id"],
+                "parent_run_id": voice[
+                    "parent_run_id"
+                ],
+                "stored_parent_run_id": voice[
+                    "stored_parent_run_id"
+                ],
+                "lineage_verified": voice[
+                    "lineage_verified"
+                ],
                 "provider": voice["provider"],
                 "model": voice["model"],
                 "manifest_sha256": voice[

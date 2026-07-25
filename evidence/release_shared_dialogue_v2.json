@@ -4,7 +4,7 @@
   "release_id": "shared-dialogue-v2",
   "previous_release_id": "baseline-v1",
   "release_object_key": "branchline/projects/last-train/releases/shared-dialogue-v2/release.json",
-  "created_at": "2026-07-18T23:38:36.688905+00:00",
+  "created_at": "2026-07-25T18:07:58.865889+00:00",
   "previous_story_file": "fixtures/main_story/story_v1.json",
   "current_story_file": "fixtures/main_story/story_v2_shared_dialogue.json",
   "story_sha256": "9d306b3b46b1c7d42939783a93ec9e9ba74ab4f9958255ac51e1d14ee40bc1da",
@@ -78,10 +78,10 @@
       "logical_id": "voice.opening",
       "creation_action": "generated_through_genblaze",
       "release_action": "rebuilt",
-      "object_key": "branchline/genblaze/assets/62/ba/62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464.wav",
-      "b2_uri": "b2://branchline-media-mikey-2026/branchline/genblaze/assets/62/ba/62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464.wav",
-      "sha256": "62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464",
-      "size_bytes": 123450,
+      "object_key": "branchline/genblaze/assets/46/51/4651c5f474c8e2d814a2cafe457d700227160a8d6cbc12fb7008b4e26ad7f6a8.wav",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/genblaze/assets/46/51/4651c5f474c8e2d814a2cafe457d700227160a8d6cbc12fb7008b4e26ad7f6a8.wav",
+      "sha256": "4651c5f474c8e2d814a2cafe457d700227160a8d6cbc12fb7008b4e26ad7f6a8",
+      "size_bytes": 127290,
       "media_type": "audio/wav",
       "depends_on": [
         "dialogue.opening"
@@ -90,10 +90,10 @@
       "provider": "google-gemini-tts",
       "model": "gemini-2.5-flash-preview-tts",
       "voice": "Kore",
-      "genblaze_run_id": "34b01b34-8313-42a2-8163-3bf97cf71fda",
-      "remote_sha256": "62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464",
+      "genblaze_run_id": "77948e7f-76ed-4f8c-beef-fcce4fa3c0f1",
+      "remote_sha256": "4651c5f474c8e2d814a2cafe457d700227160a8d6cbc12fb7008b4e26ad7f6a8",
       "remote_verified": true,
-      "remote_size_bytes": 123450
+      "remote_size_bytes": 127290
     },
     "caption.opening": {
       "logical_id": "caption.opening",
@@ -104,7 +104,7 @@
       "sha256": "117b8b93a11e32ffc780b923e51d68330596f2f1e4e07ed7817d299975bdd4b9",
       "size_bytes": 64,
       "media_type": "application/x-subrip",
-      "storage_action": "uploaded_new_cas_object",
+      "storage_action": "reused_existing_cas_object",
       "depends_on": [
         "dialogue.opening"
       ],
@@ -117,10 +117,10 @@
       "logical_id": "preview.ending_a",
       "creation_action": "compiled_by_branchline",
       "release_action": "rebuilt",
-      "object_key": "branchline/cas/sha256/ef/eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040.mp4",
-      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/ef/eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040.mp4",
-      "sha256": "eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040",
-      "size_bytes": 55905,
+      "object_key": "branchline/cas/sha256/4c/4cb869bd3c1dfaaf5c0dc55ac30877bb03896dfe8b495f952ca9dc6d7eab9c93.mp4",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/4c/4cb869bd3c1dfaaf5c0dc55ac30877bb03896dfe8b495f952ca9dc6d7eab9c93.mp4",
+      "sha256": "4cb869bd3c1dfaaf5c0dc55ac30877bb03896dfe8b495f952ca9dc6d7eab9c93",
+      "size_bytes": 56772,
       "media_type": "video/mp4",
       "storage_action": "uploaded_new_cas_object",
       "depends_on": [
@@ -129,18 +129,18 @@
         "image.ending_a"
       ],
       "dependency_fingerprint": "e8f148a6c0d024283b8979e4be9b0fce69014f28cc9d6d52c5767197df28b18e",
-      "remote_sha256": "eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040",
-      "remote_size_bytes": 55905,
+      "remote_sha256": "4cb869bd3c1dfaaf5c0dc55ac30877bb03896dfe8b495f952ca9dc6d7eab9c93",
+      "remote_size_bytes": 56772,
       "remote_verified": true
     },
     "preview.ending_b": {
       "logical_id": "preview.ending_b",
       "creation_action": "compiled_by_branchline",
       "release_action": "rebuilt",
-      "object_key": "branchline/cas/sha256/67/673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76.mp4",
-      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/67/673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76.mp4",
-      "sha256": "673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76",
-      "size_bytes": 55925,
+      "object_key": "branchline/cas/sha256/c2/c248d38f9f5ee56888ad9ba6de39f716149ce4ae0206b883dc6f34c41c36e7d3.mp4",
+      "b2_uri": "b2://branchline-media-mikey-2026/branchline/cas/sha256/c2/c248d38f9f5ee56888ad9ba6de39f716149ce4ae0206b883dc6f34c41c36e7d3.mp4",
+      "sha256": "c248d38f9f5ee56888ad9ba6de39f716149ce4ae0206b883dc6f34c41c36e7d3",
+      "size_bytes": 56791,
       "media_type": "video/mp4",
       "storage_action": "uploaded_new_cas_object",
       "depends_on": [
@@ -149,8 +149,8 @@
         "image.ending_b"
       ],
       "dependency_fingerprint": "d3e02af4bea6b138cd3f4658d8bb42b28eea543a9f14a92df7f469f89acb49ac",
-      "remote_sha256": "673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76",
-      "remote_size_bytes": 55925,
+      "remote_sha256": "c248d38f9f5ee56888ad9ba6de39f716149ce4ae0206b883dc6f34c41c36e7d3",
+      "remote_size_bytes": 56791,
       "remote_verified": true
     }
   },
@@ -168,9 +168,9 @@
     "preview.ending_a": {
       "logical_id": "preview.ending_a",
       "previous_sha256": "768f9c31d71023cb53d8f57a17df686018ee667196adb670728155551ab6c388",
-      "current_sha256": "eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040",
+      "current_sha256": "4cb869bd3c1dfaaf5c0dc55ac30877bb03896dfe8b495f952ca9dc6d7eab9c93",
       "previous_object_key": "branchline/cas/sha256/76/768f9c31d71023cb53d8f57a17df686018ee667196adb670728155551ab6c388.mp4",
-      "current_object_key": "branchline/cas/sha256/ef/eff8fa712c34b9a31e5a6d20d4953b2d9fa3ec8ae5839ceb2b072d147303e040.mp4",
+      "current_object_key": "branchline/cas/sha256/4c/4cb869bd3c1dfaaf5c0dc55ac30877bb03896dfe8b495f952ca9dc6d7eab9c93.mp4",
       "hash_changed": true,
       "object_key_changed": true,
       "release_action": "rebuilt"
@@ -178,9 +178,9 @@
     "preview.ending_b": {
       "logical_id": "preview.ending_b",
       "previous_sha256": "e781170d384ef2868409df523d121811866740dfd9f1692e9b96732e36af533a",
-      "current_sha256": "673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76",
+      "current_sha256": "c248d38f9f5ee56888ad9ba6de39f716149ce4ae0206b883dc6f34c41c36e7d3",
       "previous_object_key": "branchline/cas/sha256/e7/e781170d384ef2868409df523d121811866740dfd9f1692e9b96732e36af533a.mp4",
-      "current_object_key": "branchline/cas/sha256/67/673c24985b8a74be04554a3bb7f3eb95e1e522d27535f80c16702a78971bdc76.mp4",
+      "current_object_key": "branchline/cas/sha256/c2/c248d38f9f5ee56888ad9ba6de39f716149ce4ae0206b883dc6f34c41c36e7d3.mp4",
       "hash_changed": true,
       "object_key_changed": true,
       "release_action": "rebuilt"
@@ -208,9 +208,9 @@
     "voice.opening": {
       "logical_id": "voice.opening",
       "previous_sha256": "7c68ff99b9f308d2ef39f26d01799289a09cbe77618e0ac793ba95728993f50f",
-      "current_sha256": "62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464",
+      "current_sha256": "4651c5f474c8e2d814a2cafe457d700227160a8d6cbc12fb7008b4e26ad7f6a8",
       "previous_object_key": "branchline/genblaze/assets/7c/68/7c68ff99b9f308d2ef39f26d01799289a09cbe77618e0ac793ba95728993f50f.wav",
-      "current_object_key": "branchline/genblaze/assets/62/ba/62ba9f789f9c9137408b882d3da527cedbbb9c4982a4545b245a7447bbdfb464.wav",
+      "current_object_key": "branchline/genblaze/assets/46/51/4651c5f474c8e2d814a2cafe457d700227160a8d6cbc12fb7008b4e26ad7f6a8.wav",
       "hash_changed": true,
       "object_key_changed": true,
       "release_action": "rebuilt"
@@ -243,10 +243,13 @@
     }
   ],
   "genblaze": {
-    "run_id": "34b01b34-8313-42a2-8163-3bf97cf71fda",
+    "run_id": "77948e7f-76ed-4f8c-beef-fcce4fa3c0f1",
+    "parent_run_id": "c74f66dc-c630-4a11-bb7e-33b593ba9159",
+    "stored_parent_run_id": "c74f66dc-c630-4a11-bb7e-33b593ba9159",
+    "lineage_verified": true,
     "provider": "google-gemini-tts",
     "model": "gemini-2.5-flash-preview-tts",
-    "manifest_sha256": "09b22b49dbe0dbaf7edd5b9fa16a608e298cebd26f0355f080744e9d50f4b274",
+    "manifest_sha256": "c4b4bfce6dfa008f50434765ff6abeffb392411d6dc354399dd32c2c2cfa6e79",
     "pipeline_manifest_verified": true,
     "stored_manifest_verified": true,
     "canonical_hashes_match": true
@@ -265,5 +268,5 @@
   },
   "publication_status": "SAFE_TO_PUBLISH",
   "status": "SELECTIVE RELEASE COMPLETED AND VERIFIED",
-  "canonical_sha256": "59d5226e41227bce0c997c4b2ae798fad5bf4a34480beb58d3f1e01ad3c53e12"
+  "canonical_sha256": "2605ea1eec1471d631c7a4675e1d54302edc43094ea90bd25e4fe62289b28a55"
 }

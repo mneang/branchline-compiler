@@ -119,29 +119,29 @@ def test_each_phase_keeps_the_same_story_identity() -> None:
 
 
 def test_app_uses_focused_manga_release_studio() -> None:
-    """Change 11 replaces the older layered anime dashboard."""
+    """The current studio uses a one-screen manga release flow."""
     source = Path("app.py").read_text()
 
     assert "build_release_spread" in source
+    assert "build_one_screen_command" in source
     assert "app.add_static_files(" in source
     assert '"/manga-art"' in source
 
-    assert "ui.select(" in source
-    assert "View technical proof" in source
+    # Creator workflows are always visible as compact segments.
+    assert "render_workflow_segments(" in source
+    assert "workflow_options()" in source
+    assert "one-screen-workflows" in source
 
-    assert "release-shell" in source
+    # The old selector and Change Director are not the active UX.
+    assert "ui.select(" not in source
+    assert "director_button = ui.button(" not in source
+
+    # The manga spread and single command bar own the experience.
+    assert "release-shell one-screen" in source
     assert "manga-panel" in source
-    assert "decision-rail" in source
-    assert "sponsor-strip" in source
+    assert "one-screen-command" in source
+    assert "one-screen-primary" in source
 
-    assert "screen()" in source
-
-    # Old Change 10 layering should not remain in the rebuilt app.
-    assert "install_anime_style()" not in source
-    assert "render_scene_fx(" not in source
-    assert "render_story_quote(" not in source
-
-    # Alternative incidents stay secondary to the hero flow.
-    assert "scenario-button" not in source
+    # Do not restore the older layered dashboard navigation.
+    assert "install_anime_style(" not in source
     assert "progress_rail" not in source
-    assert "anime-route-ribbon" not in source

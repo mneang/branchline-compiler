@@ -200,14 +200,19 @@ def test_visible_release_copy_is_english_only() -> None:
 def test_app_uses_one_incident_selector_not_three_hero_buttons() -> None:
     source = Path("app.py").read_text()
 
-    assert "ui.select(" in source
-    assert "View technical proof" in source
-    assert "screen()" in source
+    # Change 13C exposes three compact workflow segments rather
+    # than a dropdown, modal, or three competing hero cards.
+    assert "render_workflow_segments(" in source
+    assert "workflow_options()" in source
+    assert "one-screen-workflows" in source
+    assert "one-screen-workflow" in source
 
+    assert "ui.select(" not in source
+    assert "director_button = ui.button(" not in source
     assert "scenario-button" not in source
     assert "progress_rail" not in source
-    assert "anime-route-ribbon" not in source
 
-    # Desktop primary path is designed as one viewport.
-    assert "height: 100vh" in source
-    assert "overflow: hidden" in source
+    # The winning journey still has one phase-aware primary action.
+    assert source.count(
+        "one-screen-primary"
+    ) >= 1

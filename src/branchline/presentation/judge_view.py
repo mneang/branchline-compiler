@@ -193,7 +193,7 @@ def normalized_paths(
     return normalized
 
 
-def build_graph_options(
+def _branchline_full_dependency_graph(
     story: dict[str, Any],
     evidence: dict[str, Any],
     *,
@@ -669,3 +669,287 @@ def load_scenarios(
         )
         for scenario_id in SCENARIO_CONFIG
     }
+
+def build_graph_options(
+    *args: Any,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Build the complete graph with an unobstructed legend."""
+    option = _branchline_full_dependency_graph(
+        *args,
+        **kwargs,
+    )
+
+    if not isinstance(
+        option,
+        dict,
+    ):
+        return option
+
+    current_legend = option.get(
+        "legend",
+        [],
+    )
+
+    legend_data: list[Any] = []
+
+    if (
+        isinstance(
+            current_legend,
+            list,
+        )
+        and current_legend
+        and isinstance(
+            current_legend[0],
+            dict,
+        )
+    ):
+        value = current_legend[0].get(
+            "data",
+            [],
+        )
+
+        if isinstance(
+            value,
+            list,
+        ):
+            legend_data = value
+
+    elif isinstance(
+        current_legend,
+        dict,
+    ):
+        value = current_legend.get(
+            "data",
+            [],
+        )
+
+        if isinstance(
+            value,
+            list,
+        ):
+            legend_data = value
+
+    option["legend"] = [
+        {
+            "data": legend_data,
+            "top": 8,
+            "left": "center",
+            "orient": "horizontal",
+            "itemGap": 30,
+            "itemWidth": 24,
+            "itemHeight": 13,
+            "textStyle": {
+                "color": "#a8b7c9",
+                "fontSize": 13,
+            },
+        }
+    ]
+
+    series = option.get(
+        "series",
+        [],
+    )
+
+    if isinstance(
+        series,
+        list,
+    ):
+        for item in series:
+            if not isinstance(
+                item,
+                dict,
+            ):
+                continue
+
+            if item.get(
+                "type"
+            ) == "graph":
+                item["top"] = 76
+                item["bottom"] = 28
+                item["left"] = 24
+                item["right"] = 24
+
+    # Change 13K-B2: semantic graph key.
+    # Shape communicates entity type.
+    # Color communicates the node's current release state.
+    option["title"] = {
+        "text": (
+            "SHAPE = ENTITY TYPE  ·  "
+            "COLOR = CURRENT STATE"
+        ),
+        "subtext": (
+            "{source|■} Source    "
+            "{media|▰} Media asset    "
+            "{route|●} Story route\n"
+            "{amber|●} Changed / rebuilt    "
+            "{cyan|●} Verified / preserved    "
+            "{rose|●} Missing / blocked    "
+            "{slate|●} Unaffected"
+        ),
+        "left": 18,
+        "top": 7,
+        "textStyle": {
+            "color": "#dce7f2",
+            "fontSize": 12,
+            "fontWeight": 700,
+        },
+        "subtextStyle": {
+            "color": "#9cafc2",
+            "fontSize": 11,
+            "lineHeight": 20,
+            "rich": {
+                "source": {
+                    "color": "#b7c6d6",
+                    "fontSize": 13,
+                },
+                "media": {
+                    "color": "#b7c6d6",
+                    "fontSize": 13,
+                },
+                "route": {
+                    "color": "#b7c6d6",
+                    "fontSize": 13,
+                },
+                "amber": {
+                    "color": "#d9a84f",
+                    "fontSize": 13,
+                },
+                "cyan": {
+                    "color": "#55dce8",
+                    "fontSize": 13,
+                },
+                "rose": {
+                    "color": "#ee7897",
+                    "fontSize": 13,
+                },
+                "slate": {
+                    "color": "#71869e",
+                    "fontSize": 13,
+                },
+            },
+        },
+    }
+
+    legends = option.get(
+        "legend",
+        [],
+    )
+
+    if isinstance(
+        legends,
+        list,
+    ):
+        for legend in legends:
+            if isinstance(
+                legend,
+                dict,
+            ):
+                legend["show"] = False
+
+    symbol_by_category = {
+        "Source": "rect",
+        "Media asset": "roundRect",
+        "Story path": "circle",
+    }
+
+    graph_series = option.get(
+        "series",
+        [],
+    )
+
+    if isinstance(
+        graph_series,
+        list,
+    ):
+        for graph in graph_series:
+            if not isinstance(
+                graph,
+                dict,
+            ):
+                continue
+
+            if graph.get("type") != "graph":
+                continue
+
+            graph["top"] = 82
+
+            categories = graph.get(
+                "categories",
+                [],
+            )
+
+            category_names: dict[int, str] = {}
+
+            if isinstance(
+                categories,
+                list,
+            ):
+                for index, category in enumerate(
+                    categories
+                ):
+                    if not isinstance(
+                        category,
+                        dict,
+                    ):
+                        continue
+
+                    name = str(
+                        category.get(
+                            "name",
+                            "",
+                        )
+                    )
+
+                    category_names[index] = name
+
+                    symbol = symbol_by_category.get(
+                        name
+                    )
+
+                    if symbol:
+                        category["symbol"] = symbol
+
+            data = graph.get(
+                "data",
+                [],
+            )
+
+            if isinstance(
+                data,
+                list,
+            ):
+                for node in data:
+                    if not isinstance(
+                        node,
+                        dict,
+                    ):
+                        continue
+
+                    category = node.get(
+                        "category"
+                    )
+
+                    if isinstance(
+                        category,
+                        int,
+                    ):
+                        category_name = (
+                            category_names.get(
+                                category,
+                                "",
+                            )
+                        )
+                    else:
+                        category_name = str(
+                            category or ""
+                        )
+
+                    symbol = symbol_by_category.get(
+                        category_name
+                    )
+
+                    if symbol:
+                        node["symbol"] = symbol
+
+    return option

@@ -52,8 +52,9 @@ def test_ui_has_no_fake_progress_percentage() -> None:
 def test_primary_flow_remains_clean() -> None:
     source = Path("app.py").read_text()
 
-    assert "ui.select(" in source
-    assert "scenario-button" not in source
+    assert "render_workflow_segments(" in source
+    assert "one-screen-workflows" in source
+    assert "ui.select(" not in source
     assert "progress_rail" not in source
 
     assert "height: 100vh" in source

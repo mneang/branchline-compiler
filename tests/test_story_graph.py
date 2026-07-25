@@ -73,4 +73,3 @@ def test_ending_b_image_change_is_branch_specific() -> None:
         "paths_affected": 1,
         "paths_total": 2,
     }
-
