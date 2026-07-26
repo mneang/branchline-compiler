@@ -226,9 +226,9 @@ def _safety_proof() -> dict[str, Any]:
         "eyebrow": "PUBLICATION-GUARD PROOF",
         "title": "No stale branches published.",
         "summary": (
-            "B2 could not retrieve preview.ending_b, so Branchline "
+            "B2 could not retrieve preview.ending_b. Branchline "
             "blocked Ending B while Ending A remained independently "
-            "verified."
+            "verified and publishable."
         ),
         "nodes": [
             {

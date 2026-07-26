@@ -46,7 +46,7 @@ def test_playback_action_reflects_open_state() -> None:
     app = source()
 
     assert (
-        "Close verified playback"
+        '"Close playback"'
         in app
     )
 
@@ -56,7 +56,12 @@ def test_playback_action_reflects_open_state() -> None:
     )
 
     assert (
-        "close_verified_media"
+        "media-open"
+        in app
+    )
+
+    assert (
+        "close-media-action"
         in app
     )
 

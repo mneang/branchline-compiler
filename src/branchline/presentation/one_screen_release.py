@@ -238,10 +238,10 @@ def _visual_revision_command(
 
         return {
             "step": "05–06 · VERIFY + RECORD",
-            "headline": "Both endings are current.",
+            "headline": "0 unnecessary AI requests.",
             "detail": (
-                "Ending B was rebuilt while Ending A "
-                "remained byte-identical."
+                "Ending B rebuilt · 4 verified assets reused from B2 · "
+                "Ending A remained byte-identical."
             ),
             "metrics": [
                 {

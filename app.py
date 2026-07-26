@@ -2758,6 +2758,1353 @@ ui.add_head_html(
         }
       }
 
+
+      /* CHANGE 13K-D · XABI LEGIBILITY LOCK */
+
+      /*
+       * Main release surface:
+       * preserve the artwork, but give the decision deck
+       * enough height and remove judge-facing microcopy.
+       */
+      @media (min-width: 1100px) {
+        .release-shell.one-screen
+        .spread-stage {
+          min-height: 0 !important;
+        }
+
+        .one-screen-command {
+          min-height: 158px !important;
+          grid-template-columns:
+            minmax(360px, 1.18fr)
+            minmax(390px, 1fr)
+            minmax(260px, .72fr)
+            !important;
+        }
+
+        .command-copy,
+        .command-evidence,
+        .command-actions {
+          padding:
+            13px 18px
+            !important;
+        }
+
+        .command-headline {
+          font-size:
+            clamp(
+              22px,
+              1.45vw,
+              26px
+            )
+            !important;
+          line-height: 1.08 !important;
+        }
+
+        .command-detail {
+          font-size: 14px !important;
+          line-height: 1.36 !important;
+        }
+
+        .command-explanation {
+          display: -webkit-box;
+          overflow: hidden;
+          font-size: 13px !important;
+          line-height: 1.38 !important;
+          text-overflow: clip !important;
+          white-space: normal !important;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+        }
+
+        .command-lineage,
+        .command-sponsor-line {
+          overflow: hidden;
+          font-size: 11px !important;
+          line-height: 1.35 !important;
+          text-overflow: clip !important;
+          white-space: normal !important;
+        }
+
+        .command-verdict {
+          padding: 5px 9px !important;
+          font-size: 10px !important;
+        }
+
+        .one-screen-workflow {
+          min-height: 38px !important;
+          font-size: 11px !important;
+        }
+
+        .one-screen-proof {
+          font-size: 12px !important;
+        }
+
+        /*
+         * Main-screen sponsor proof:
+         * label + decisive value only.
+         * Detailed explanations remain in Technical Proof.
+         */
+        .director-proof-grid {
+          gap: 8px !important;
+        }
+
+        .director-proof-cell {
+          min-height: 58px !important;
+          gap: 3px !important;
+          padding: 9px 11px !important;
+        }
+
+        .director-proof-label {
+          font-size: 9px !important;
+          line-height: 1.15 !important;
+        }
+
+        .director-proof-value {
+          overflow: visible !important;
+          font-size: 13px !important;
+          line-height: 1.22 !important;
+          text-overflow: clip !important;
+          white-space: normal !important;
+        }
+
+        .director-proof-detail {
+          display: none !important;
+        }
+      }
+
+      /*
+       * Focused proof:
+       * one viewport, one causal story, no duplicated verdict.
+       */
+      .focused-proof-card {
+        position: relative;
+        width: min(1180px, 94vw)
+          !important;
+        max-width: 1180px !important;
+        max-height: 90vh !important;
+        gap: 10px !important;
+        padding: 18px 20px !important;
+        overflow: hidden !important;
+      }
+
+      .focused-proof-card
+      > .row:first-child {
+        min-height: 72px;
+        padding-right: 230px;
+      }
+
+      .focused-proof-card
+      .proof-eyebrow {
+        font-size: 10px !important;
+      }
+
+      .focused-proof-card
+      .proof-title {
+        max-width: 860px;
+        font-size: 34px !important;
+        line-height: 1.04 !important;
+      }
+
+      .focused-proof-card
+      .proof-summary {
+        max-width: 930px;
+        font-size: 14px !important;
+        line-height: 1.35 !important;
+      }
+
+      /*
+       * Shapes remain self-explanatory in focused mode.
+       * The complete graph retains the full semantic legend.
+       */
+      .focused-proof-card
+      .proof-legend-row {
+        display: none !important;
+      }
+
+      .focused-proof-card
+      .proof-topology {
+        min-height: 0 !important;
+        gap: 14px !important;
+        padding: 6px 0 !important;
+      }
+
+      .focused-proof-card
+      .proof-topology.split {
+        grid-template-columns:
+          minmax(0, 1.55fr)
+          minmax(280px, .78fr)
+          !important;
+      }
+
+      .focused-proof-card
+      .proof-node {
+        width: min(210px, 20vw)
+          !important;
+        min-height: 78px !important;
+        gap: 4px !important;
+        padding: 11px 13px !important;
+      }
+
+      .focused-proof-card
+      .proof-node-label {
+        font-size: 15px !important;
+        line-height: 1.2 !important;
+      }
+
+      .focused-proof-card
+      .proof-node-detail {
+        font-size: 13px !important;
+        line-height: 1.28 !important;
+      }
+
+      .focused-proof-card
+      .proof-independent-label {
+        font-size: 10px !important;
+      }
+
+      .focused-proof-card
+      .proof-independent-panel {
+        padding-left: 14px !important;
+      }
+
+      .focused-proof-card
+      .proof-independent-panel
+      .proof-node.independent {
+        width: min(300px, 100%)
+          !important;
+        min-height: 74px !important;
+      }
+
+      .focused-proof-card
+      .proof-metric-row {
+        gap: 10px !important;
+      }
+
+      .focused-proof-card
+      .proof-metric {
+        min-height: 74px !important;
+        padding: 10px 14px !important;
+      }
+
+      .focused-proof-card
+      .proof-metric-label {
+        font-size: 10px !important;
+      }
+
+      .focused-proof-card
+      .proof-metric-value {
+        font-size: 30px !important;
+        line-height: 1 !important;
+      }
+
+      /*
+       * Three sponsor facts become one horizontal proof strip.
+       */
+      .focused-proof-card
+      .proof-facts {
+        display: grid !important;
+        grid-template-columns:
+          repeat(
+            3,
+            minmax(0, 1fr)
+          );
+        gap: 10px !important;
+      }
+
+      .focused-proof-card
+      .proof-fact-row {
+        min-width: 0;
+        min-height: 78px;
+        flex-direction: column
+          !important;
+        align-items: flex-start
+          !important;
+        gap: 3px !important;
+        padding: 10px 12px !important;
+        border: 1px solid
+          rgba(
+            126,
+            146,
+            174,
+            .24
+          );
+        background:
+          rgba(
+            13,
+            27,
+            45,
+            .62
+          );
+      }
+
+      .focused-proof-card
+      .proof-fact-label {
+        width: auto !important;
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+      }
+
+      .focused-proof-card
+      .proof-fact-value {
+        font-size: 14px !important;
+        line-height: 1.25 !important;
+      }
+
+      .focused-proof-card
+      .proof-fact-detail {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+
+      /*
+       * Keep the existing verdict element in the DOM,
+       * but position it beside the heading.
+       */
+      .focused-proof-card
+      > .proof-verdict {
+        position: absolute;
+        top: 19px;
+        right: 68px;
+        z-index: 3;
+        margin: 0 !important;
+        padding: 7px 10px !important;
+        font-size: 10px !important;
+        line-height: 1 !important;
+      }
+
+      .focused-proof-card
+      .proof-actions {
+        min-height: 42px;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+      }
+
+      .focused-proof-card
+      .proof-actions
+      .q-btn {
+        min-height: 40px;
+        font-size: 13px;
+      }
+
+      /*
+       * Exact demo-height treatment.
+       */
+      @media (
+        min-width: 1100px
+      ) and (
+        max-height: 820px
+      ) {
+        header {
+          padding-top: 5px !important;
+          padding-bottom: 5px !important;
+        }
+
+        .release-shell.one-screen {
+          height:
+            calc(100vh - 80px)
+            !important;
+        }
+
+        .one-screen-command {
+          min-height: 174px
+            !important;
+        }
+
+        .command-copy,
+        .command-evidence,
+        .command-actions {
+          padding-top: 11px
+            !important;
+          padding-bottom: 11px
+            !important;
+        }
+      }
+
+      /*
+       * Focused proof at 1280 × 720:
+       * remove secondary prose, never the decisive evidence.
+       */
+      @media (
+        min-width: 900px
+      ) and (
+        max-height: 760px
+      ) {
+        .focused-proof-card {
+          max-height: 91vh
+            !important;
+          gap: 7px !important;
+          padding: 14px 16px
+            !important;
+        }
+
+        .focused-proof-card
+        > .row:first-child {
+          min-height: 60px;
+          padding-right: 210px;
+        }
+
+        .focused-proof-card
+        .proof-title {
+          font-size: 30px
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-summary {
+          font-size: 13px
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-topology {
+          gap: 10px !important;
+          padding: 2px 0
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-node,
+        .focused-proof-card
+        .proof-independent-panel
+        .proof-node.independent {
+          min-height: 64px
+            !important;
+          padding: 8px 11px
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-metric {
+          min-height: 60px
+            !important;
+          padding: 8px 12px
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-metric-value {
+          font-size: 26px
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-fact-row {
+          min-height: 58px;
+          padding: 8px 10px
+            !important;
+        }
+
+        .focused-proof-card
+        .proof-fact-detail {
+          display: none !important;
+        }
+
+        .focused-proof-card
+        > .proof-verdict {
+          top: 15px;
+          right: 61px;
+        }
+      }
+
+
+      /* CHANGE 13K-E · LA PELOPINA SPACING LOCK */
+
+      /*
+       * Xavi principle:
+       * guarantee space for the decision instead of
+       * asking important evidence to survive compression.
+       */
+      @media (min-width: 1100px) {
+        .release-shell.one-screen {
+          grid-template-rows:
+            minmax(0, 1fr)
+            clamp(
+              224px,
+              25vh,
+              252px
+            )
+            !important;
+          min-height: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /*
+         * The artwork accepts the remaining space.
+         * It no longer dictates the page height.
+         */
+        .release-shell.one-screen
+        .spread-stage {
+          width: 100%;
+          height: 100% !important;
+          min-height: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /*
+         * Row one is the six-stage rail.
+         * Row two is the decision, proof, and action deck.
+         */
+        .one-screen-command {
+          width: 100%;
+          height: 100% !important;
+          min-height: 0 !important;
+          grid-template-rows:
+            34px
+            minmax(0, 1fr)
+            !important;
+          overflow: hidden !important;
+        }
+
+        /*
+         * Real breathing room between each functional zone.
+         */
+        .command-copy,
+        .command-evidence,
+        .command-actions {
+          min-width: 0;
+          min-height: 0;
+          padding:
+            16px 22px
+            !important;
+        }
+
+        .command-copy {
+          justify-content: flex-start;
+          gap: 7px !important;
+        }
+
+        .command-evidence {
+          justify-content: center;
+          gap: 10px !important;
+        }
+
+        .command-actions {
+          justify-content: center;
+          gap: 11px !important;
+        }
+
+        /*
+         * The change receipt already shows the source,
+         * before state, and verified state.
+         * Raw identifiers and duplicate impact copy
+         * belong inside Technical Proof.
+         */
+        .director-change-subject {
+          display: none !important;
+        }
+
+        .director-change-impact {
+          display: none !important;
+        }
+
+        /*
+         * Observe-state explanations duplicate the
+         * visible before/after receipt.
+         * Plan and completion explanations remain.
+         */
+        .one-screen-command.observe
+        .command-explanation {
+          display: none !important;
+        }
+
+        /*
+         * Let the change receipt breathe.
+         */
+        .director-change {
+          gap: 8px !important;
+          margin: 0 !important;
+          padding-bottom: 9px !important;
+        }
+
+        .director-change-header {
+          margin-bottom: 5px !important;
+        }
+
+        .director-change-eyebrow,
+        .director-change-label {
+          font-size: 9px !important;
+          line-height: 1.2 !important;
+        }
+
+        .director-change-value {
+          font-size: 12px !important;
+          line-height: 1.32 !important;
+        }
+
+        .director-change-arrow {
+          margin:
+            0 8px
+            !important;
+        }
+
+        /*
+         * Main outcome hierarchy.
+         */
+        .command-headline {
+          margin-top: 1px !important;
+          max-width: 32ch;
+        }
+
+        .command-detail {
+          max-width: 62ch;
+        }
+
+        /*
+         * Sponsor proof should look intentional,
+         * not like compressed metadata.
+         */
+        .director-proof-grid {
+          gap: 10px !important;
+          margin-top: 2px !important;
+        }
+
+        .director-proof-cell {
+          min-height: 64px !important;
+          gap: 4px !important;
+          padding:
+            11px 13px
+            !important;
+        }
+
+        .director-proof-label {
+          font-size: 9px !important;
+          line-height: 1.2 !important;
+        }
+
+        .director-proof-value {
+          font-size: 13px !important;
+          line-height: 1.25 !important;
+        }
+
+        /*
+         * The decisive action deserves physical presence.
+         */
+        .one-screen-primary {
+          min-height: 52px !important;
+          padding:
+            0 20px
+            !important;
+          border-radius: 3px;
+          font-size: 16px !important;
+          line-height: 1.15 !important;
+        }
+
+        .one-screen-proof {
+          min-height: 34px;
+          padding:
+            6px 9px
+            !important;
+        }
+      }
+
+      /*
+       * Exact demo viewport:
+       * 1280 × 720 at 100% browser zoom.
+       */
+      @media (
+        min-width: 1100px
+      ) and (
+        max-height: 760px
+      ) {
+        header {
+          padding-top: 5px !important;
+          padding-bottom: 5px !important;
+        }
+
+        .release-shell.one-screen {
+          height:
+            calc(100vh - 74px)
+            !important;
+          grid-template-rows:
+            minmax(0, 1fr)
+            224px
+            !important;
+        }
+
+        .one-screen-command {
+          grid-template-rows:
+            32px
+            minmax(0, 1fr)
+            !important;
+        }
+
+        .command-copy,
+        .command-evidence,
+        .command-actions {
+          padding:
+            14px 18px
+            !important;
+        }
+
+        .command-copy {
+          gap: 6px !important;
+        }
+
+        .command-headline {
+          font-size: 22px !important;
+          line-height: 1.08 !important;
+        }
+
+        .command-detail {
+          font-size: 13px !important;
+          line-height: 1.35 !important;
+        }
+
+        .director-change {
+          padding-bottom: 7px
+            !important;
+        }
+
+        .director-proof-cell {
+          min-height: 58px
+            !important;
+          padding:
+            9px 11px
+            !important;
+        }
+
+        .story-strip {
+          left: 18px !important;
+          right: 18px !important;
+          bottom: 14px !important;
+        }
+      }
+
+
+      /* CHANGE 13K-F · INIESTA MEDIA FINISH */
+
+      .media-dialog {
+        width:
+          min(
+            760px,
+            calc(100vw - 32px)
+          )
+          !important;
+        max-width: 760px !important;
+        max-height:
+          min(
+            88vh,
+            610px
+          )
+          !important;
+        gap: 12px !important;
+        padding: 18px !important;
+        overflow: hidden !important;
+        border-color:
+          rgba(
+            89,
+            214,
+            232,
+            .38
+          )
+          !important;
+        box-shadow:
+          0 24px 80px
+          rgba(
+            0,
+            0,
+            0,
+            .68
+          );
+      }
+
+      .media-dialog
+      .q-video,
+      .media-dialog
+      .nicegui-video,
+      .media-dialog
+      video {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 405px !important;
+        aspect-ratio:
+          16 / 9
+          !important;
+        background: #02050a !important;
+      }
+
+      .media-dialog
+      video {
+        object-fit: contain !important;
+      }
+
+      .media-dialog
+      .q-video
+      iframe {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio:
+          16 / 9
+          !important;
+      }
+
+      .one-screen-command.media-open
+      .one-screen-primary {
+        min-height: 40px !important;
+        border:
+          1px solid
+          rgba(
+            108,
+            174,
+            224,
+            .56
+          )
+          !important;
+        background:
+          rgba(
+            14,
+            38,
+            60,
+            .24
+          )
+          !important;
+        color: #91c9ee !important;
+        box-shadow: none !important;
+        font-size: 14px !important;
+      }
+
+      .one-screen-command.media-open
+      .one-screen-primary:hover {
+        border-color:
+          rgba(
+            108,
+            190,
+            238,
+            .82
+          )
+          !important;
+        background:
+          rgba(
+            27,
+            73,
+            105,
+            .34
+          )
+          !important;
+      }
+
+      @media (
+        min-width: 900px
+      ) and (
+        max-height: 760px
+      ) {
+        .media-dialog {
+          width:
+            min(
+              700px,
+              calc(100vw - 28px)
+            )
+            !important;
+          max-width: 700px !important;
+          max-height: 88vh !important;
+          gap: 9px !important;
+          padding: 14px !important;
+        }
+
+        .media-dialog
+        .q-video,
+        .media-dialog
+        .nicegui-video,
+        .media-dialog
+        video {
+          max-height: 340px !important;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .media-dialog {
+          width:
+            calc(100vw - 18px)
+            !important;
+          padding: 12px !important;
+          overflow-y: auto !important;
+        }
+      }
+
+
+      /* CHANGE 13K-G · VILLA FINISH */
+
+      /*
+       * The live judge-facing player is an in-panel overlay,
+       * not the legacy media dialog.
+       *
+       * Use the available right-panel height so the verified
+       * media becomes visible evidence rather than a thumbnail.
+       */
+      .panel-media-overlay {
+        position: absolute !important;
+        inset:
+          8px
+          8px
+          10px
+          8px
+          !important;
+        width: auto !important;
+        height: auto !important;
+        max-width: none !important;
+        max-height: none !important;
+        box-sizing: border-box !important;
+        gap: 8px !important;
+        padding:
+          14px
+          16px
+          !important;
+        overflow: hidden !important;
+        z-index: 35 !important;
+        border-color:
+          rgba(
+            89,
+            214,
+            232,
+            .40
+          )
+          !important;
+        background:
+          linear-gradient(
+            160deg,
+            rgba(
+              8,
+              18,
+              31,
+              .98
+            ),
+            rgba(
+              5,
+              12,
+              23,
+              .97
+            )
+          )
+          !important;
+        box-shadow:
+          0
+          20px
+          55px
+          rgba(
+            0,
+            0,
+            0,
+            .60
+          );
+      }
+
+      /*
+       * Size the element itself to 16:9.
+       * This eliminates the 579 × 96 ultra-wide player
+       * that made a valid video look miniature.
+       */
+      .panel-media-overlay
+      .verified-panel-video {
+        width:
+          min(
+            100%,
+            460px
+          )
+          !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        aspect-ratio:
+          16 / 9
+          !important;
+        align-self: center !important;
+        flex:
+          0
+          0
+          auto
+          !important;
+        object-fit: contain !important;
+        background: #02050a !important;
+        border:
+          1px
+          solid
+          rgba(
+            89,
+            214,
+            232,
+            .36
+          );
+        box-shadow:
+          0
+          12px
+          32px
+          rgba(
+            0,
+            0,
+            0,
+            .45
+          );
+      }
+
+      /*
+       * Quasar applies bg-primary directly to the command button.
+       * Beat that exact live selector and demote Close playback.
+       */
+      .one-screen-command.media-open
+      .command-actions
+      .one-screen-primary.bg-primary {
+        min-height: 40px !important;
+        border:
+          1px
+          solid
+          rgba(
+            108,
+            174,
+            224,
+            .62
+          )
+          !important;
+        background:
+          rgba(
+            12,
+            35,
+            55,
+            .30
+          )
+          !important;
+        background-color:
+          rgba(
+            12,
+            35,
+            55,
+            .30
+          )
+          !important;
+        background-image:
+          none
+          !important;
+        color: #91c9ee !important;
+        box-shadow: none !important;
+        font-size: 14px !important;
+      }
+
+      .one-screen-command.media-open
+      .command-actions
+      .one-screen-primary.bg-primary
+      .q-btn__content {
+        color: #91c9ee !important;
+      }
+
+      .one-screen-command.media-open
+      .command-actions
+      .one-screen-primary.bg-primary:hover {
+        border-color:
+          rgba(
+            108,
+            190,
+            238,
+            .86
+          )
+          !important;
+        background:
+          rgba(
+            25,
+            67,
+            96,
+            .42
+          )
+          !important;
+        background-color:
+          rgba(
+            25,
+            67,
+            96,
+            .42
+          )
+          !important;
+      }
+
+      /*
+       * The guided next workflow remains the clear shot on goal.
+       */
+      .one-screen-command.media-open
+      .command-actions
+      .director-next {
+        min-height: 44px !important;
+        border-color:
+          rgba(
+            89,
+            214,
+            232,
+            .78
+          )
+          !important;
+        box-shadow:
+          0
+          8px
+          24px
+          rgba(
+            35,
+            116,
+            164,
+            .22
+          );
+      }
+
+      /*
+       * Exact recording viewport.
+       * A 370px 16:9 player renders at roughly 370 × 208,
+       * replacing the observed 579 × 96 strip.
+       */
+      @media (
+        min-width: 1100px
+      ) and (
+        max-height: 760px
+      ) {
+        .panel-media-overlay {
+          inset:
+            6px
+            6px
+            8px
+            6px
+            !important;
+          gap: 6px !important;
+          padding:
+            10px
+            12px
+            !important;
+        }
+
+        .panel-media-overlay
+        .verified-panel-video {
+          width:
+            min(
+              100%,
+              370px
+            )
+            !important;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .panel-media-overlay {
+          inset:
+            6px
+            !important;
+          overflow-y: auto !important;
+        }
+
+        .panel-media-overlay
+        .verified-panel-video {
+          width:
+            min(
+              100%,
+              420px
+            )
+            !important;
+        }
+      }
+
+
+      /* CHANGE 13K-H · ACTION HIERARCHY LOCK */
+
+      /*
+       * Closing an already-open proof is reversible.
+       * It must never compete visually with the next workflow.
+       */
+      .close-media-action {
+        width: 100%;
+        min-height: 40px;
+        border:
+          1px solid
+          rgba(
+            108,
+            174,
+            224,
+            .62
+          )
+          !important;
+        background:
+          rgba(
+            12,
+            35,
+            55,
+            .30
+          )
+          !important;
+        background-color:
+          rgba(
+            12,
+            35,
+            55,
+            .30
+          )
+          !important;
+        background-image:
+          none
+          !important;
+        color: #91c9ee !important;
+        box-shadow: none !important;
+        font-size: 14px;
+        font-weight: 850;
+      }
+
+      .close-media-action
+      .q-btn__content {
+        color: #91c9ee !important;
+      }
+
+      .close-media-action:hover {
+        border-color:
+          rgba(
+            108,
+            190,
+            238,
+            .86
+          )
+          !important;
+        background:
+          rgba(
+            25,
+            67,
+            96,
+            .42
+          )
+          !important;
+        background-color:
+          rgba(
+            25,
+            67,
+            96,
+            .42
+          )
+          !important;
+      }
+
+
+      /* CHANGE 13K-I · FINAL VIEWPORT FIT */
+
+      /*
+       * Exact judge viewport:
+       * preserve every action and proof cell without
+       * allowing the bottom edge to crop the command deck.
+       */
+      @media (
+        min-width: 1100px
+      ) and (
+        max-height: 760px
+      ) {
+        .release-shell.one-screen {
+          height:
+            calc(100vh - 82px)
+            !important;
+          grid-template-rows:
+            minmax(0, 1fr)
+            244px
+            !important;
+        }
+
+        .one-screen-command {
+          height:
+            calc(100% - 4px)
+            !important;
+          align-self: start !important;
+          grid-template-rows:
+            32px
+            minmax(0, 1fr)
+            !important;
+        }
+
+        .command-evidence,
+        .command-actions {
+          gap: 7px !important;
+        }
+
+        .command-actions > * {
+          flex-shrink: 0;
+        }
+      }
+
+
+      /* CHANGE 13K-J · FINAL WHISTLE FIT */
+
+      /*
+       * At the recorded 1280 × 720 viewport, the right-panel
+       * overlay has about 279px of usable height.
+       *
+       * Keep the header, revision tabs, and complete player.
+       * Defer the duplicate post-player explanation because
+       * the command deck and Technical Proof already contain it.
+       */
+      @media (
+        min-width: 1100px
+      ) and (
+        max-height: 760px
+      ) {
+        .panel-media-overlay {
+          inset:
+            6px
+            6px
+            0
+            6px
+            !important;
+          gap: 4px !important;
+          padding:
+            8px
+            10px
+            !important;
+        }
+
+        .panel-media-overlay
+        > .nicegui-row:first-child {
+          min-height: 30px !important;
+        }
+
+        .panel-media-overlay
+        .q-tabs {
+          min-height: 32px !important;
+        }
+
+        .panel-media-overlay
+        .q-tab {
+          min-height: 32px !important;
+          padding:
+            0
+            10px
+            !important;
+        }
+
+        /*
+         * 288 × 162 remains readable in the demo while leaving
+         * enough room for the header, tabs, controls, and padding.
+         */
+        .panel-media-overlay
+        .verified-panel-video {
+          width:
+            min(
+              100%,
+              288px
+            )
+            !important;
+          max-width: 288px !important;
+          height: auto !important;
+          aspect-ratio:
+            16 / 9
+            !important;
+          align-self: center !important;
+          flex:
+            0
+            0
+            auto
+            !important;
+          object-fit: contain !important;
+        }
+
+        /*
+         * The two elements after the player duplicate information
+         * already visible in the completed release and proof action.
+         */
+        .panel-media-overlay
+        > .verified-panel-video
+        ~ * {
+          display: none !important;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .manga-image,
         .cause-line::after,
@@ -2798,8 +4145,8 @@ def build_dialogue_evidence_bundle() -> dict[str, Any]:
         "mode": "VERIFIED_GENBLAZE_EVIDENCE",
         "status": "VERIFIED GENBLAZE CASE",
         "reason": (
-            "Canonical release evidence replay. "
-            "Direct B2 playback is demonstrated by Visual revision."
+            "Approved Genblaze release evidence. "
+            "Next, Visual Revision verifies selective reuse directly from B2."
         ),
         "previous_release_id": "baseline-v1",
         "release_id": "shared-dialogue-v2",
@@ -3015,7 +4362,7 @@ def render_panel(
                                 "Compiled Ending B route"
                                 if verified_mode
                                 else (
-                                    "Shared dialogue release evidence"
+                                    "Verified dialogue release"
                                     if evidence_mode
                                     else
                                     "Remote playback unavailable"
@@ -3560,13 +4907,30 @@ def render_one_screen_command(
         with ui.column().classes(
             "command-actions"
         ):
+            is_close_media = (
+                command["primary_kind"]
+                == "close_media"
+            )
+
+            primary_props = (
+                "outline no-caps color=blue-grey-4"
+                if is_close_media
+                else "unelevated no-caps"
+            )
+
+            primary_classes = (
+                "close-media-action"
+                if is_close_media
+                else "one-screen-primary"
+            )
+
             primary = ui.button(
                 command["primary_label"],
                 on_click=on_primary,
             ).props(
-                "unelevated no-caps"
+                primary_props
             ).classes(
-                "one-screen-primary"
+                primary_classes
             )
 
             if (
@@ -4477,10 +5841,13 @@ def index() -> None:
             }
             and phase == COMPLETE
         ):
+            one_screen["tone"] = (
+                f'{one_screen["tone"]} media-open'
+            )
             one_screen = {
                 **one_screen,
                 "primary_label": (
-                    "Close verified playback"
+                    "Close playback"
                 ),
                 "primary_kind": "close_media",
             }
