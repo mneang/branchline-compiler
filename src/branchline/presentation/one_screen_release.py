@@ -361,9 +361,10 @@ def _dialogue_revision_command(
     if phase == COMPLETE:
         return {
             "step": "05–06 · VERIFY + RECORD",
-            "headline": "Both routes use the new dialogue.",
+            "headline": "No stale branches detected.",
             "detail": (
-                "Genblaze provenance and every remote object verify."
+                "1 line changed · 4 rebuilt · 2 preserved · "
+                "6 / 6 B2 objects verified."
             ),
             "metrics": [
                 {
@@ -436,7 +437,7 @@ def _safety_command(
             ),
             "lineage": None,
             "sponsor_line": None,
-            "primary_label": "Run safety check",
+            "primary_label": "Inspect release candidate",
             "primary_kind": "advance",
             "tone": "observe-danger",
             "verdict": None,
@@ -469,7 +470,7 @@ def _safety_command(
             ),
             "lineage": None,
             "sponsor_line": None,
-            "primary_label": "Verify candidate",
+            "primary_label": "Verify release candidate",
             "primary_kind": "advance",
             "tone": "planned-danger",
             "verdict": None,
@@ -478,9 +479,10 @@ def _safety_command(
     if phase == COMPLETE:
         return {
             "step": "05–06 · VERIFY + RECORD",
-            "headline": "Ending B is locked.",
+            "headline": "No stale branches published.",
             "detail": (
-                "Ending A remains publishable and remotely verified."
+                "Ending B blocked · "
+                "Ending A remains publishable and independently verified."
             ),
             "metrics": [
                 {

@@ -35,10 +35,10 @@ def test_product_purpose_is_immediately_clear() -> None:
             "its generated media."
         ),
         "supporting": (
-            "Change one scene. Rebuild only what depends on it."
+            "Change one scene. Rebuild only what it affects."
         ),
         "promise": (
-            "Publish only after every route is verified."
+            "Publish no stale branches."
         ),
     }
 
@@ -154,7 +154,7 @@ def test_safety_case_ends_with_contained_failure() -> None:
     assert context[
         "final_receipt"
     ]["title"] == (
-        "Unsafe branch contained"
+        "No stale branches published"
     )
 
     assert context[

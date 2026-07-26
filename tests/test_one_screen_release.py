@@ -150,7 +150,7 @@ def test_safety_state_preserves_the_healthy_route() -> None:
     )
 
     assert command["headline"] == (
-        "Ending B is locked."
+        "No stale branches published."
     )
 
     assert command["verdict"] == (

@@ -22,10 +22,10 @@ SCENARIO_PRESENTATION: dict[str, dict[str, Any]] = {
         "assets_reused": 4,
         "routes_total": 2,
         "genblaze_value": (
-            "Verified voice provenance reused"
+            "0 unnecessary AI requests"
         ),
         "genblaze_detail": (
-            "0 unnecessary AI requests"
+            "Verified Genblaze provenance reused from B2"
         ),
     },
     "scenario_a": {
@@ -70,10 +70,10 @@ PURPOSE = {
         "its generated media."
     ),
     "supporting": (
-        "Change one scene. Rebuild only what depends on it."
+        "Change one scene. Rebuild only what it affects."
     ),
     "promise": (
-        "Publish only after every route is verified."
+        "Publish no stale branches."
     ),
 }
 
@@ -404,12 +404,12 @@ def build_final_receipt(
     if scenario_id == "scenario_c":
         return {
             "eyebrow": "SAFETY RECEIPT",
-            "title": "Unsafe branch contained",
+            "title": "No stale branches published",
             "release_id": release_id,
             "approval_id": approval_id,
             "status": publication_status,
             "line_one": (
-                "Ending A remains remotely verified."
+                "Ending A remains independently verified."
             ),
             "line_two": (
                 "Ending B cannot publish until its "

@@ -224,10 +224,11 @@ def _dialogue_proof() -> dict[str, Any]:
 def _safety_proof() -> dict[str, Any]:
     return {
         "eyebrow": "PUBLICATION-GUARD PROOF",
-        "title": "One missing object blocks one route.",
+        "title": "No stale branches published.",
         "summary": (
-            "preview.ending_b could not be retrieved from B2. "
-            "Ending A remains independently verified and publishable."
+            "B2 could not retrieve preview.ending_b, so Branchline "
+            "blocked Ending B while Ending A remained independently "
+            "verified."
         ),
         "nodes": [
             {
